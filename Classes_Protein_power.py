@@ -112,11 +112,13 @@ class Grid:
         return score
 
 class Protein:
-    def __init__(self, sequence, grid_size):
+    def __init__(self, sequence):
         # string van aminozuren
         self.sequence = sequence
-        self.amino_acids = []
-        self.grid = Grid(grid_size)
+
+        # populate list of amino acids
+        self.amino_acids = [AminoAcid(x, None, None) for x in self.sequence]
+
         self.fold_protein()
 
     def fold_protein(self):
