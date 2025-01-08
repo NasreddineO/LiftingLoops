@@ -1,5 +1,6 @@
 class AminoAcid:
-    def __init___(self, type, x, y):
+
+    def __init__(self, type, x, y):
         # type amino acid
         self.type = type
 
