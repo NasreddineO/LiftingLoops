@@ -119,7 +119,6 @@ class Protein:
         # populate list of amino acids
         self.amino_acids = [AminoAcid(x, None, None) for x in self.sequence]
 
-        self.fold_protein()
 
     def fold_protein(self):
         # start in het midden
