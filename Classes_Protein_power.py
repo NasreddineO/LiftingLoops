@@ -1,6 +1,5 @@
-class AminoAcid:
-
-    def __init__(self, type, x, y):
+class AminoAcid():
+    def __init___(self, type, x, y):
         # type amino acid
         self.type = type
 
@@ -8,7 +7,7 @@ class AminoAcid:
         self.x = x
         self.y = y
 
-class Grid:
+class Grid():
     def __init__(self, size):
         self.size = size
         self.score = 0
@@ -127,3 +126,38 @@ class Protein:
 
     def evaluate_stability(self):
         pass
+
+    def update_2d_coordinates(aminoacid, coordinate):
+        """
+        Updates the coordinates of individual aminoacid objects.
+        Aminoacid objects contain the Type and their location.
+
+        Parameters:
+        - aminoacids (list): list with aminoacid instances
+        """
+        x, y = coordinate
+
+        for aminoacid in self.amino_acids:
+            aminoacid.x = x
+            aminoacid.y = y
+            y += 1
+
+        # startposition for the first aminoacid (for now)
+        x, y = 0, 0
+        fold = 2
+
+        # update the coordinates of an aminoacid based on the fold (only in x or y for now, straight line)
+        for aminoacid in self.amino_acids:
+            if fold == 1:
+                x += 1
+            elif fold == -1:
+                x -= 1
+            elif fold == 2:
+                y += 1
+            elif fold == -2:
+                y -= 1
+            # Hier kun je later ook de Z-richting toevoegen als je dat wilt
+
+            # Update de coördinaten van het aminozuur
+            aminoacid.x = x
+            aminoacid.y = y
