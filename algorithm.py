@@ -48,6 +48,10 @@ if __name__ == '__main__':
     P = Protein(sequence, output_file, threeD)
 
     for amino_acid in P.sequence[2:]:
-        P.step(amino_acid)
+        P.step(P.amino_acids, amino_acid)
 
-    P.calculate_score(P.amino_acids)
+    P.folds.append(0)
+    P.data_to_csv(P.amino_acids, P.folds)
+    # P.check_legal_moves(P.amino_acids)
+    # P.evaluate_moves(P.legal_moves, P.amino_acids)
+    # P.update_values(P.amino_acids, P.next_move)
