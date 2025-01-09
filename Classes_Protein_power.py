@@ -1,5 +1,7 @@
 from collections import OrderedDict
 import csv
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class Protein():
     def __init__(self, sequence: str, output_file: str, threeD: bool):
@@ -101,11 +103,11 @@ class Protein():
         return self.next_move, self.folds
 
     def update_values(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
-        dict[coor] = type
+        dict[coordinate] = type
 
         return dict
 
-    def data_to_csv(self, dict: OrderedDict, folds: List):
+    def data_to_csv(self, dict: OrderedDict, folds: list):
         """
         Extracts the type of aminoacid (string) and the corresponding fold (int) from a dictionary
         and writes it to a CSV-file.
@@ -131,3 +133,59 @@ class Protein():
             file.write(f"score,{score}")
 
         print(f"CSV file created successfully.")
+
+
+    def visualise(self, dict):
+        types = list(dict.values())
+
+        # Assign colors or markers based on labels (for now only H and P)
+        colors = ['red' if type == 'H' else 'blue' for type in types]
+
+        if self.threeD is False:
+            coordinates = [(x, y) for x, y, z in dict.keys()]
+            x, y = zip(*coordinates)
+
+            # Plotting
+            fig = plt.figure(figsize=(10, 8))
+            ax = fig.add_subplot()
+
+            # Scatter plot
+            ax.scatter(x, y, c=colors, s=50, label='H: red, P: blue')
+
+            # Connect points to visualize folding
+            ax.plot(x, y, color='gray', linewidth=1, alpha=0.6)
+
+            # Labels and title
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+            ax.set_title('2D Amino Acid Fold Visualization')
+
+            # Show legend
+            plt.legend(loc='upper left')
+            plt.show()
+
+        if self.threeD is True:
+            coordinates = list(dict.keys())
+
+            # Separate x, y, z
+            x, y, z = zip(*coordinates)
+
+            # Plotting
+            fig = plt.figure(figsize=(10, 8))
+            ax = fig.add_subplot(projection='3d')
+
+            # Scatter plot
+            ax.scatter(x, y, z, c=colors, s=50, label='H: red, P: blue')
+
+            # Connect points to visualize folding
+            ax.plot(x, y, z, color='gray', linewidth=1, alpha=0.6)
+
+            # Labels and title
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+            ax.set_zlabel('Z')
+            ax.set_title('3D Amino Acid Fold Visualization')
+
+            # Show legend
+            plt.legend(loc='upper left')
+            plt.show()
