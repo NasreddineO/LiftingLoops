@@ -1,3 +1,7 @@
+# Names: Hendrik DuPont, Jeppe Mul & Nasreddine Ouchene
+# This script contains a Protein class with methods that are intended to come together in an algorithm to fold the protein.
+# This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
+
 from collections import OrderedDict
 import csv
 import matplotlib.pyplot as plt
@@ -61,22 +65,24 @@ class Protein():
         return False
 
     def step(self, dict: OrderedDict, type: str):
-        self.check_legal_moves(dict)
-        self.evaluate_moves(self.legal_moves, dict)
-        self.update_values(dict, self.next_move, type)
+        legal_moves = self.check_legal_moves(dict)
+        next_move = self.evaluate_moves(legal_moves, dict)
+        self.update_values(dict, next_move, type)
 
     def check_legal_moves(self, dict: OrderedDict):
         x, y, z = next(reversed(dict))
         # 3D:
-        self.legal_moves = set([
+        legal_moves = set([
             (x + 1, y, z), (x - 1, y, z),
-            (x, y + 1, z), (x, y - 1, z),
-            (x, y, z + 1), (x, y, z - 1)
-        ])
+            (x, y + 1, z), (x, y - 1, z)])
 
-        self.legal_moves -= dict.keys()
+        if self.threeD:
+            legal_moves.update([(x, y, z + 1), (x, y, z - 1)])
 
-        return self.legal_moves
+
+        legal_moves -= dict.keys()
+
+        return legal_moves
 
     def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
         # Voor nu: gewoon de keten verlengen zonder score in gedachten te houden. Oftewel de eerste coor in de set
@@ -97,10 +103,10 @@ class Protein():
         elif z_next - z == -1:
             fold = -3
 
-        self.next_move = (x_next, y_next, z_next)
+        next_move = (x_next, y_next, z_next)
         self.folds.append(fold)
 
-        return self.next_move, self.folds
+        return next_move
 
     def update_values(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
         dict[coordinate] = type

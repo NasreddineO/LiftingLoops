@@ -1,3 +1,7 @@
+# Names: Hendrik DuPont, Jeppe Mul & Nasreddine Ouchene
+# This script contains an algorithm that folds a protein. It does so on the basis of a TBD algorithm.
+# This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
+
 from Classes_Protein_power import Protein
 import argparse
 
