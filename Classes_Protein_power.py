@@ -1,3 +1,7 @@
+# Names: Hendrik DuPont, Jeppe Mul & Nasreddine Ouchene
+# This script contains a Protein class with methods that are intended to come together in an algorithm to fold the protein.
+# This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
+
 from collections import OrderedDict
 import csv
 
