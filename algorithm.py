@@ -49,5 +49,3 @@ if __name__ == '__main__':
 
     for amino_acid in P.sequence[2:]:
         P.step(amino_acid)
-
-    P.calculate_score(P.amino_acids)
