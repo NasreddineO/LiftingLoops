@@ -15,15 +15,6 @@ class Protein():
         # add initial amino acids and fold, as rotational symmetry dictates that the first 2 amino acids are functionally identical no matter how they are placed
         self.amino_acids[(0,0,0)] = self.sequence[0]
         self.amino_acids[(1,0,0)] = self.sequence[1]
-        self.amino_acids[(1,1,0)] = self.sequence[2]
-        self.amino_acids[(0,1,0)] = self.sequence[3]
-        self.amino_acids[(-1,1,0)] = self.sequence[4]
-        self.amino_acids[(-1,2,0)] = self.sequence[5]
-        self.amino_acids[(-1,3,0)] = self.sequence[6]
-        self.amino_acids[(0,3,0)] = self.sequence[7]
-        self.amino_acids[(0,2,0)] = self.sequence[8]
-
-
         self.folds.append(1)
 
 
@@ -66,7 +57,7 @@ class Protein():
                 return True
 
         return False
-        
+
     def step(self, dict, type):
         self.check_legal_moves(dict)
         self.evaluate_moves(self.legal_moves, dict)
@@ -136,6 +127,7 @@ class Protein():
             for amino, fold in zip(dict.values(), folds):
                 writer.writerow([amino, fold])
 
-        # file.write(f"score,{score}")
+            score = self.calculate_score(self.amino_acids)
+            file.write(f"score,{score}")
 
         print(f"CSV file created successfully.")
