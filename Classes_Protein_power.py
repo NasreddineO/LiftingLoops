@@ -58,12 +58,12 @@ class Protein():
 
         return False
 
-    def step(self, dict, type):
+    def step(self, dict: OrderedDict, type: str):
         self.check_legal_moves(dict)
         self.evaluate_moves(self.legal_moves, dict)
         self.update_values(dict, self.next_move, type)
 
-    def check_legal_moves(self, dict):
+    def check_legal_moves(self, dict: OrderedDict):
         x, y, z = next(reversed(dict))
         # 3D:
         self.legal_moves = [
@@ -76,7 +76,7 @@ class Protein():
 
         return self.legal_moves
 
-    def evaluate_moves(self, legal_moves, dict):
+    def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
         # Voor nu: gewoon de keten verlengen zonder score in gedachten te houden. Oftewel de eerste coor in de set
         x_next, y_next, z_next = next(iter(legal_moves))
         x, y, z = next(reversed(dict))
@@ -100,12 +100,12 @@ class Protein():
 
         return self.next_move, self.folds
 
-    def update_values(self, dict, coor, type):
+    def update_values(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
         dict[coor] = type
 
         return dict
 
-    def data_to_csv(self, dict, folds):
+    def data_to_csv(self, dict: OrderedDict, folds: List):
         """
         Extracts the type of aminoacid (string) and the corresponding fold (int) from a dictionary
         and writes it to a CSV-file.
