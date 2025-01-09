@@ -54,7 +54,6 @@ if __name__ == '__main__':
     for amino_acid in P.sequence[2:]:
         P.step(P.amino_acids, amino_acid)
 
-    print(P.amino_acids)
     P.folds.append(0)
     P.data_to_csv(P.amino_acids, P.folds)
     P.visualise(P.amino_acids)

@@ -147,30 +147,7 @@ class Protein():
         # Assign colors or markers based on labels (for now only H and P)
         colors = ['red' if type == 'H' else 'blue' for type in types]
 
-        if self.threeD is False:
-            coordinates = [(x, y) for x, y, z in dict.keys()]
-            x, y = zip(*coordinates)
-
-            # Plotting
-            fig = plt.figure(figsize=(10, 8))
-            ax = fig.add_subplot()
-
-            # Scatter plot
-            ax.scatter(x, y, c=colors, s=50, label='H: red, P: blue')
-
-            # Connect points to visualize folding
-            ax.plot(x, y, color='gray', linewidth=1, alpha=0.6)
-
-            # Labels and title
-            ax.set_xlabel('X')
-            ax.set_ylabel('Y')
-            ax.set_title('2D Amino Acid Fold Visualization')
-
-            # Show legend
-            plt.legend(loc='upper left')
-            plt.show()
-
-        if self.threeD is True:
+        if self.threeD:
             coordinates = list(dict.keys())
 
             # Separate x, y, z
@@ -191,6 +168,29 @@ class Protein():
             ax.set_ylabel('Y')
             ax.set_zlabel('Z')
             ax.set_title('3D Amino Acid Fold Visualization')
+
+            # Show legend
+            plt.legend(loc='upper left')
+            plt.show()
+
+        else:
+            coordinates = [(x, y) for x, y, z in dict.keys()]
+            x, y = zip(*coordinates)
+
+            # Plotting
+            fig = plt.figure(figsize=(10, 8))
+            ax = fig.add_subplot()
+
+            # Scatter plot
+            ax.scatter(x, y, c=colors, s=50, label='H: red, P: blue')
+
+            # Connect points to visualize folding
+            ax.plot(x, y, color='gray', linewidth=1, alpha=0.6)
+
+            # Labels and title
+            ax.set_xlabel('X')
+            ax.set_ylabel('Y')
+            ax.set_title('2D Amino Acid Fold Visualization')
 
             # Show legend
             plt.legend(loc='upper left')
