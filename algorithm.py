@@ -1,4 +1,4 @@
-from Classes_Protein_power import AminoAcid, Protein
+from Classes_Protein_power import Protein
 import argparse
 
 if __name__ == '__main__':
@@ -12,24 +12,42 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
+    'output_file',
+    help="The name of the csv file to put the data in"
+    )
+
+    parser.add_argument(
     '-threeD',
     action= 'store_true',
     help="A flag that changes the algorithm to work in three-dimensional space rather than two-dimensional space."
     )
 
+
+
     # convert to variables for legibility
     args = parser.parse_args()
     sequence = args.sequence
-    three_dimensional = args.threeD
+    output_file = args.output_file
+    threeD = args.threeD
 
-    print(three_dimensional)
+
 
     # check for correct input types:
     if not type(sequence) is str:
         raise TypeError("Please enter a string as a sequence")
 
-    if not type(three_dimensional) is bool:
+    if not type(output_file) is str:
+        raise TypeError("Please enter a string as a sequence")
+
+    if not type(threeD) is bool:
         raise TypeError("Please enter a boolean for adding a 3rd dimension")
 
+
+
     # initialize Protein
-    Proteïne = Protein(sequence)
+    P = Protein(sequence, output_file, threeD)
+
+    for amino_acid in P.sequence[2:]:
+        P.step(amino_acid)
+
+    P.calculate_score(P.amino_acids)
