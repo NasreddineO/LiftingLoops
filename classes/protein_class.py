@@ -86,7 +86,7 @@ class Protein():
 
             writer = csv.writer(file)
 
-            writer.writerow(["Amino", "Fold"])
+            writer.writerow(["amino", "fold"])
 
             for amino, fold in zip(dict.values(), folds):
                 writer.writerow([amino, fold])
