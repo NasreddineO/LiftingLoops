@@ -144,13 +144,9 @@ class Protein():
     def visualise(self, dict):
         types = list(dict.values())
 
-        # Assign colors or markers based on labels (for now only H and P)
-        colors = ['red' if type == 'H' else 'blue' for type in types]
-
         if self.threeD:
-            coordinates = list(dict.keys())
-
             # Separate x, y, z
+            coordinates = list(dict.keys())
             x, y, z = zip(*coordinates)
 
             # Plotting
@@ -158,19 +154,24 @@ class Protein():
             ax = fig.add_subplot(projection='3d')
 
             # Scatter plot
-            ax.scatter(x, y, z, c=colors, s=50, label='H: red, P: blue')
+            ax.scatter(x, y, z, s=0, label='Aminoacids')
 
             # Connect points to visualize folding
             ax.plot(x, y, z, color='gray', linewidth=1, alpha=0.6)
 
-            # Labels and title
+            # Add the amino type as marker and give individual color
+            for xi, yi, zi, label in zip(x, y, z, types):
+                color = 'red' if label == 'H' else 'blue'
+                ax.text(xi, yi, zi, label, fontsize=15, ha='center', va='center', color=color)
+
+            # Labels en title
             ax.set_xlabel('X')
             ax.set_ylabel('Y')
             ax.set_zlabel('Z')
             ax.set_title('3D Amino Acid Fold Visualization')
 
-            # Show legend
-            plt.legend(loc='upper left')
+            # Legend
+            ax.legend(loc='upper left')
             plt.show()
 
         else:
@@ -182,10 +183,14 @@ class Protein():
             ax = fig.add_subplot()
 
             # Scatter plot
-            ax.scatter(x, y, c=colors, s=50, label='H: red, P: blue')
+            ax.scatter(x, y, s=0, label='Aminoacids')
 
             # Connect points to visualize folding
             ax.plot(x, y, color='gray', linewidth=1, alpha=0.6)
+
+            for xi, yi, label in zip(x, y, types):
+                color = 'red' if label == 'H' else 'blue'
+                ax.text(xi, yi, label, fontsize=15, ha='center', va='center', color=color)
 
             # Labels and title
             ax.set_xlabel('X')
