@@ -56,3 +56,4 @@ if __name__ == '__main__':
 
     P.folds.append(0)
     P.data_to_csv(P.amino_acids, P.folds, output_file)
+    P.visualise(P.amino_acids)
