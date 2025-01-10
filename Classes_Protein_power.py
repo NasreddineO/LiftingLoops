@@ -111,7 +111,7 @@ class Protein():
 
         return dict
 
-    def data_to_csv(self, dict: OrderedDict, folds: list):
+    def data_to_csv(self, dict: OrderedDict, folds: list, output_file: str):
         """
         Extracts the type of aminoacid (string) and the corresponding fold (int) from a dictionary
         and writes it to a CSV-file.
@@ -124,7 +124,7 @@ class Protein():
         - protein_data.csv: a csv-file containing the type of aminoacid and the fold,
                             including the final score for the stability of the protein
         """
-        with open("protein_data.csv", mode="w", newline="") as file:
+        with open(f"{output_file}", mode="w", newline="") as file:
 
             writer = csv.writer(file)
 

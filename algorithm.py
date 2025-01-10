@@ -55,4 +55,4 @@ if __name__ == '__main__':
         P.step(P.amino_acids, amino_acid)
 
     P.folds.append(0)
-    P.data_to_csv(P.amino_acids, P.folds)
+    P.data_to_csv(P.amino_acids, P.folds, output_file)
