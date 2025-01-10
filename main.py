@@ -2,7 +2,9 @@
 # This script contains an algorithm that folds a protein. It does so on the basis of a TBD algorithm.
 # This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
 
-from Classes_Protein_power import Protein
+from classes.protein_class import Protein
+from algorithms.algorithm_class import Algorithm
+from algorithms.random import Random
 import argparse
 
 if __name__ == '__main__':
@@ -51,9 +53,11 @@ if __name__ == '__main__':
     # initialize Protein
     P = Protein(sequence, output_file, threeD)
 
-    for amino_acid in P.sequence[2:]:
-        P.step(P.amino_acids, amino_acid)
+    # initialize an algorithm
+    algorithm = Random(P)
 
-    P.folds.append(0)
-    P.data_to_csv(P.amino_acids, P.folds, output_file)
-    P.visualise(P.amino_acids)
+    # run the algorithm for each node to add
+    for amino_acid in algorithm.protein.sequence[2:]:
+        algorithm.step(algorithm.protein.amino_acids, amino_acid)
+
+    algorithm.finish_up(output_file)

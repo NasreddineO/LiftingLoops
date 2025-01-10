@@ -64,51 +64,7 @@ class Protein():
 
         return False
 
-    def step(self, dict: OrderedDict, type: str):
-        legal_moves = self.check_legal_moves(dict)
-        next_move = self.evaluate_moves(legal_moves, dict)
-        self.update_values(dict, next_move, type)
-
-    def check_legal_moves(self, dict: OrderedDict):
-        x, y, z = next(reversed(dict))
-        # 3D:
-        legal_moves = set([
-            (x + 1, y, z), (x - 1, y, z),
-            (x, y + 1, z), (x, y - 1, z)])
-
-        if self.threeD:
-            legal_moves.update([(x, y, z + 1), (x, y, z - 1)])
-
-
-        legal_moves -= dict.keys()
-
-        return legal_moves
-
-    def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
-        # Voor nu: gewoon de keten verlengen zonder score in gedachten te houden. Oftewel de eerste coor in de set
-        x_next, y_next, z_next = next(iter(legal_moves))
-        x, y, z = next(reversed(dict))
-
-        # check the direction of the move by checking the difference between te current coordinate and next move
-        if x_next - x == 1:
-            fold = 1
-        elif x_next - x == -1:
-            fold = -1
-        elif y_next - y == 1:
-            fold = 2
-        elif y_next - y == -1:
-            fold = -2
-        elif z_next - z == 1:
-            fold = 3
-        elif z_next - z == -1:
-            fold = -3
-
-        next_move = (x_next, y_next, z_next)
-        self.folds.append(fold)
-
-        return next_move
-
-    def update_values(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
+    def add_coordinate(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
         dict[coordinate] = type
 
         return dict
