@@ -17,8 +17,16 @@ class Algorithm():
         if self.protein.threeD:
             legal_moves.update([(x, y, z + 1), (x, y, z - 1)])
 
-
         legal_moves -= dict.keys()
+
+        # remove moves
+        moves_to_remove = set()
+        for x,y,z in legal_moves:
+            if (x+1, y,z) in self.protein.amino_acids and (x-1,y,z) in self.protein.amino_acids and (x,y+1,z) in self.protein.amino_acids and (x,y-1,z) in self.protein.amino_acids:
+                to_remove.add((x,y,z))
+                print('debug')
+
+        legal_moves -= moves_to_remove
 
         return legal_moves
 

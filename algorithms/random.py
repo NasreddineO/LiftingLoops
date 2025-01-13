@@ -13,7 +13,6 @@ class Random(Algorithm):
         next_move = self.evaluate_moves(legal_moves, dict)
         self.protein.add_coordinate(dict, next_move, type)
 
-
     def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
         # pick a random move by taking the first one from the set of legal moves
         x_next, y_next, z_next = random.choice(list(legal_moves))
