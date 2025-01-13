@@ -5,6 +5,7 @@
 from classes.protein_class import Protein
 from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
+from algorithms.random_greedy import Random_Greedy
 import argparse
 
 if __name__ == '__main__':
@@ -41,6 +42,9 @@ if __name__ == '__main__':
     # check for correct input types:
     if not type(sequence) is str:
         raise TypeError("Please enter a string as a sequence")
+
+    if not len(sequence) > 1:
+        raise ValueError("Please enter a sequence of more than 1 amino acid. A sequence with only 1 amino acid is not a protein.")
 
     if not type(output_file) is str:
         raise TypeError("Please enter a string as a sequence")

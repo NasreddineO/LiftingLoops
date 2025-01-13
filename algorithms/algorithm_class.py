@@ -7,11 +7,12 @@ class Algorithm():
 
 
     def check_legal_moves(self, dict: OrderedDict):
+
         x, y, z = next(reversed(dict))
-        # 3D:
+        # 3D
         legal_moves = set([
-            (x + 1, y, z), (x - 1, y, z),
-            (x, y + 1, z), (x, y - 1, z)])
+        (x + 1, y, z), (x - 1, y, z),
+        (x, y + 1, z), (x, y - 1, z)])
 
         if self.protein.threeD:
             legal_moves.update([(x, y, z + 1), (x, y, z - 1)])
