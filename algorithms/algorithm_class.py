@@ -22,9 +22,10 @@ class Algorithm():
         # remove moves
         moves_to_remove = set()
         for x,y,z in legal_moves:
-            if (x+1, y,z) in self.protein.amino_acids and (x-1,y,z) in self.protein.amino_acids and (x,y+1,z) in self.protein.amino_acids and (x,y-1,z) in self.protein.amino_acids:
-                to_remove.add((x,y,z))
-                print('debug')
+            if (x+1,y,z) in self.protein.amino_acids and (x-1,y,z) in self.protein.amino_acids and (x,y+1,z) in self.protein.amino_acids and (x,y-1,z) in self.protein.amino_acids:
+                if not self.protein.threeD or ((x,y,z+1) in self.protein.amino_acids and (x-1,y,z-1) in self.protein.amino_acids):
+                    moves_to_remove.add((x,y,z))
+                    print('debug')
 
         legal_moves -= moves_to_remove
 
