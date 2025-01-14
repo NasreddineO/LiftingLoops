@@ -17,6 +17,7 @@ class Protein():
         # dictionary {coordinate: type}
         self.amino_acids = OrderedDict()
         self.folds = []
+        self.adjacent_amino_acids = []
 
         # add initial amino acids and fold, as rotational symmetry dictates that the first 2 amino acids are functionally identical no matter how they are placed
         self.amino_acids[(0,0,0)] = self.sequence[0]
@@ -37,10 +38,13 @@ class Protein():
 
                     # assign points to strong bonds
                     if set(amino_list[acid1][1] + amino_list[acid2][1]) == {'H'}:
+                        self.adjacent_amino_acids.append((amino_list[acid1][0], amino_list[acid2][0]))
                         score -= 1
                     elif set(amino_list[acid1][1] + amino_list[acid2][1]) == {'H', 'C'}:
+                        self.adjacent_amino_acids.append((amino_list[acid1][0], amino_list[acid2][0]))
                         score -= 1
                     elif set(amino_list[acid1][1] + amino_list[acid2][1]) == {'C'}:
+                        self.adjacent_amino_acids.append((amino_list[acid1][0], amino_list[acid2][0]))
                         score -= 5
 
         return score
@@ -61,7 +65,6 @@ class Protein():
         elif coordinate1[0] == coordinate2[0] and coordinate1[1] == coordinate2[1]:
             if abs(coordinate1[2] - coordinate2[2]) == 1:
                 return True
-
         return False
 
     def add_coordinate(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
@@ -99,6 +102,7 @@ class Protein():
 
     def visualise(self, dict):
         types = list(dict.values())
+        colors = {'H': 'red', 'P': 'blue', 'C': 'green'}
 
         if self.threeD:
             # Separate x, y, z
@@ -142,17 +146,25 @@ class Protein():
             ax.scatter(x, y, s=0, label='Aminoacids')
 
             # Connect points to visualize folding
-            ax.plot(x, y, color='gray', linewidth=1, alpha=0.6)
+            ax.plot(x, y, color='gray', linewidth=2, alpha=0.6)
 
+            scatter_handles = []
             for xi, yi, label in zip(x, y, types):
-                color = 'red' if label == 'H' else 'blue'
-                ax.text(xi, yi, label, fontsize=15, ha='center', va='center', color=color)
+                sc = ax.scatter(xi, yi, s=100, c=colors[label], label=label)
+
+                if label not in [handle.get_label() for handle in scatter_handles]:
+                    scatter_handles.append(sc)
+
+            for (x1, y1, z1), (x2, y2, z2) in self.adjacent_amino_acids:
+                ax.plot([x1, x2], [y1, y2], linestyle=':', color='purple', linewidth=2)
 
             # Labels and title
             ax.set_xlabel('X')
             ax.set_ylabel('Y')
             ax.set_title('2D Amino Acid Fold Visualization')
 
-            # Show legend
-            plt.legend(loc='upper left')
+            # Place the legend outside the plot area
+            plt.legend(handles=scatter_handles, loc='upper left')
+
+            # Show the plot
             plt.show()

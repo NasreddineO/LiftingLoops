@@ -1,21 +1,32 @@
 from .algorithm_class import Algorithm
 from collections import OrderedDict
-import random
 
-class Random(Algorithm):
+class Random_Greedy(Algorithm):
+
     def __init__(self, protein):
         super().__init__(protein)
 
-
-
     def step(self, dict: OrderedDict, type: str):
         legal_moves = self.check_legal_moves(dict)
-        next_move = self.evaluate_moves(legal_moves, dict)
+        next_move = self.evaluate_moves(legal_moves, dict, type)
         self.protein.add_coordinate(dict, next_move, type)
 
-    def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
-        # pick a random move by taking the first one from the set of legal moves
-        x_next, y_next, z_next = random.choice(list(legal_moves))
+    def evaluate_moves(self, legal_moves: set, dict: OrderedDict, type:str):
+        # check for scoring moves
+        best_score = self.protein.calculate_score(self.protein.amino_acids)
+        print(legal_moves)
+        x_next, y_next, z_next = next(iter(legal_moves))
+
+        for move in legal_moves:
+            self.protein.add_coordinate(dict, move, type)
+            current_score = self.protein.calculate_score(self.protein.amino_acids)
+            self.protein.amino_acids.popitem()
+            if current_score <= best_score:
+                best_score = current_score
+                x_next, y_next, z_next = move
+
+
+
         x, y, z = next(reversed(dict))
 
         # check the direction of the move by checking the difference between te current coordinate and next move

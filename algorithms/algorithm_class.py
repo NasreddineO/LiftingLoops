@@ -4,8 +4,6 @@ class Algorithm():
     def __init__(self, protein):
         self.protein = protein
 
-
-
     def check_legal_moves(self, dict: OrderedDict):
         x, y, z = next(reversed(dict))
         # 3D:
