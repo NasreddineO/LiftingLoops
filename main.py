@@ -78,6 +78,8 @@ if __name__ == '__main__':
     def run_experiment():
 
         best_score = 0
+        best_protein = None
+        scores = []
 
         for i in range(iterations):
 
@@ -90,13 +92,15 @@ if __name__ == '__main__':
                     algorithm = run_trial(P)
                     success = True
                     score = P.calculate_score(P.amino_acids)
+                    scores.append(score)
 
                     if score < best_score:
                         best_score = score
-                        algorithm.finish_up(output_file)
+                        best_protein = algorithm
 
                 # reset the protein if we get a fatal error
                 except IndexError:
                     P =Protein(sequence, output_file, threeD)
+        best_protein.finish_up(output_file)
 
     run_experiment()
