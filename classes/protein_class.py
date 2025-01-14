@@ -24,13 +24,13 @@ class Protein():
         self.folds.append(1)
 
 
-    def calculate_score(self, amino_acids: OrderedDict):
+    def calculate_score(self):
         score = 0
 
-        amino_list = list(amino_acids.items())
+        amino_list = list(self.amino_acids.items())
 
-        for acid1 in range(len(amino_acids)):
-            for acid2 in range(acid1+3, len(amino_acids)):
+        for acid1 in range(len(self.amino_acids)):
+            for acid2 in range(acid1+3, len(self.amino_acids)):
 
                 # check whether the amino acids are adjacent
                 if self.is_adjacent(amino_list[acid1][0], amino_list[acid2][0]):
@@ -91,7 +91,7 @@ class Protein():
             for amino, fold in zip(dict.values(), folds):
                 writer.writerow([amino, fold])
 
-            score = self.calculate_score(self.amino_acids)
+            score = self.calculate_score()
             file.write(f"score,{score}")
 
         print(f"CSV file created successfully.")

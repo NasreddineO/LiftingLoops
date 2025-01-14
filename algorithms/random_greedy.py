@@ -13,13 +13,13 @@ class Random_Greedy(Algorithm):
 
     def evaluate_moves(self, legal_moves: set, dict: OrderedDict, type:str):
         # check for scoring moves
-        best_score = self.protein.calculate_score(self.protein.amino_acids)
+        best_score = self.protein.calculate_score()
         print(legal_moves)
         x_next, y_next, z_next = next(iter(legal_moves))
 
         for move in legal_moves:
             self.protein.add_coordinate(dict, move, type)
-            current_score = self.protein.calculate_score(self.protein.amino_acids)
+            current_score = self.protein.calculate_score()
             self.protein.amino_acids.popitem()
             if current_score <= best_score:
                 best_score = current_score

@@ -8,10 +8,10 @@ class Random(Algorithm):
 
 
 
-    def step(self, dict: OrderedDict, type: str):
-        legal_moves = self.check_legal_moves(dict)
-        next_move = self.evaluate_moves(legal_moves, dict)
-        self.protein.add_coordinate(dict, next_move, type)
+    def step(self, type: str):
+        legal_moves = self.check_legal_moves(self.protein.amino_acids)
+        next_move = self.evaluate_moves(legal_moves, self.protein.amino_acids)
+        self.protein.add_coordinate(self.protein.amino_acids, next_move, type)
 
     def evaluate_moves(self, legal_moves: set, dict: OrderedDict):
         # pick a random move by taking the first one from the set of legal moves
