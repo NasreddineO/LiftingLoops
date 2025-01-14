@@ -14,7 +14,7 @@ class Protein():
         self.output_file = output_file
         self.threeD = threeD
 
-        # dictionary {coordinate: {"type": type, "fold": fold}}
+        # dictionary {coordinate: type}
         self.amino_acids = OrderedDict()
         self.folds = []
 

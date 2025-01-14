@@ -5,6 +5,7 @@
 from classes.protein_class import Protein
 from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
+from algorithms.genetic_algorithm import Genetic
 import argparse
 
 if __name__ == '__main__':
