@@ -19,6 +19,11 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
+    'iterations',
+    help="The number of iterations to run the experiment"
+    )
+
+    parser.add_argument(
     'output_file',
     help="The name of the csv file to put the data in"
     )
@@ -26,7 +31,7 @@ if __name__ == '__main__':
     parser.add_argument(
     '-threeD',
     action= 'store_true',
-    help="A flag that changes the algorithm to work in three-dimensional space rather than two-dimensional space."
+    help="A flag that changes the algorithm to work in three-dimensional space rather than two-dimensional space"
     )
 
 
@@ -35,7 +40,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
     sequence = args.sequence
     output_file = args.output_file
+    iterations = int(args.iterations)
     threeD = args.threeD
+
 
 
 
@@ -46,6 +53,9 @@ if __name__ == '__main__':
     if not len(sequence) > 1:
         raise ValueError("Please enter a sequence of more than 1 amino acid. A sequence with only 1 amino acid is not a protein.")
 
+    if not type(iterations) is int:
+        raise TypeError("Please enter an integer")
+
     if not type(output_file) is str:
         raise TypeError("Please enter a string as a sequence")
 
@@ -54,14 +64,39 @@ if __name__ == '__main__':
 
 
 
-    # initialize Protein
-    P = Protein(sequence, output_file, threeD)
+    def run_trial(protein: Protein):
 
-    # initialize an algorithm
-    algorithm = Random(P)
+        # initialize an algorithm
+        algorithm = Random(protein)
 
-    # run the algorithm for each node to add
-    for amino_acid in algorithm.protein.sequence[2:]:
-        algorithm.step(algorithm.protein.amino_acids, amino_acid)
+        # run the algorithm for each node to add
+        for amino_acid in protein.sequence[2:]:
+            algorithm.step(protein.amino_acids, amino_acid)
 
-    algorithm.finish_up(output_file)
+        return algorithm
+
+    def run_experiment():
+
+        best_score = 0
+
+        for i in range(iterations):
+
+            # initialize Protein
+            P = Protein(sequence, output_file, threeD)
+
+            success = False
+            while not success:
+                try:
+                    algorithm = run_trial(P)
+                    success = True
+                    score = P.calculate_score(P.amino_acids)
+
+                    if score < best_score:
+                        best_score = score
+                        algorithm.finish_up(output_file)
+
+                # reset the protein if we get a fatal error
+                except IndexError:
+                    P =Protein(sequence, output_file, threeD)
+
+    run_experiment()
