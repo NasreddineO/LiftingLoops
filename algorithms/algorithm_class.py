@@ -28,7 +28,12 @@ class Algorithm():
 
         legal_moves -= moves_to_remove
 
-        return legal_moves
+        if legal_moves != set():
+            return legal_moves
+
+        #pass None if no legal moves are found
+        else:
+            return None
 
 
 

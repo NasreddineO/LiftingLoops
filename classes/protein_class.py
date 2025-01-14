@@ -65,9 +65,11 @@ class Protein():
         return False
 
     def add_coordinate(self, dict: OrderedDict, coordinate:tuple[int, int, int], type: str):
-        dict[coordinate] = type
+        if coordinate is not None:
 
-        return dict
+            dict[coordinate] = type
+        else:
+            pass
 
     def data_to_csv(self, dict: OrderedDict, folds: list, output_file: str):
         """
