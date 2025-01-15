@@ -49,6 +49,8 @@ def run_experiment():
                     P =Protein(sequence, output_file, threeD)
                     print('debug')
 
+    print(scores)
+
     best_protein.finish_up(output_file)
 
 
