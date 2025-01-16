@@ -50,21 +50,26 @@ class Algorithm():
         Visualise.draw(self.protein)
 
     def calculate_folds(self):
-        for amino_acid in range(len(self.protein.amino_acids)-1):
-            x,y,z = list(self.protein.amino_acids.items())[amino_acid][0]
-            x_next, y_next, z_next = list(self.protein.amino_acids.items())[amino_acid+1][0]
+        
+        if len(self.protein.amino_acids) == len(self.protein.sequence):
 
-            if x_next - x == 1:
-                fold = 1
-            elif x_next - x == -1:
-                fold = -1
-            elif y_next - y == 1:
-                fold = 2
-            elif y_next - y == -1:
-                fold = -2
-            elif z_next - z == 1:
-                fold = 3
-            elif z_next - z == -1:
-                fold = -3
+            for amino_acid in range(len(self.protein.amino_acids)-1):
+                x,y,z = list(self.protein.amino_acids.items())[amino_acid][0]
+                x_next, y_next, z_next = list(self.protein.amino_acids.items())[amino_acid+1][0]
 
-            self.protein.folds.append(fold)
+                if x_next - x == 1:
+                    fold = 1
+                elif x_next - x == -1:
+                    fold = -1
+                elif y_next - y == 1:
+                    fold = 2
+                elif y_next - y == -1:
+                    fold = -2
+                elif z_next - z == 1:
+                    fold = 3
+                elif z_next - z == -1:
+                    fold = -3
+
+                self.protein.folds.append(fold)
+        else:
+            pass

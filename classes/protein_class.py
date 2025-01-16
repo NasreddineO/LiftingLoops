@@ -63,6 +63,5 @@ class Protein():
         return False
 
     def add_coordinate(self, dict: OrderedDict, coordinate: tuple[int, int, int], type: str):
-        dict[coordinate] = type
-
-        return dict
+        if coordinate is not None:
+            dict[coordinate] = type

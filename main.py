@@ -11,12 +11,16 @@ import argparse
 
 def run_trial(protein: Protein):
 
-    # initialize an algorithm
-    algorithm = Beam(protein, 5000)
+    beam = True
+    if beam == True:
 
-    # run the algorithm for each node to add
-    for amino_acid in range(len(protein.sequence)-2):
-        algorithm.step(protein.sequence[amino_acid+2], amino_acid+1)
+        # initialize an algorithm
+        algorithm = Beam(protein, 1, 1)
+        algorithm.run()
+
+    if beam == False:
+        algorithm = Random(protein)
+        algorithm.run()
 
     return algorithm
 
@@ -34,11 +38,11 @@ def run_experiment():
         success = False
         while not success:
                 algorithm = run_trial(P)
+                algorithm.finish_up()
 
                 # NOTA BENE this needs to be fixed
-                if len(algorithm.protein.amino_acids) != len(sequence):
+                if len(algorithm.protein.amino_acids) == len(sequence):
                     success = True
-                    algorithm.finish_up()
                     score = algorithm.protein.calculate_score()
                     scores.append(score)
 
