@@ -62,6 +62,9 @@ def run_experiment():
     Visualise.analysis(P.sequence, scores)
     best_protein.create_output(output_file)
     plt.show()
+    algorithm.calculate_protein(algorithm.protein.folds)
+
+
 
 if __name__ == '__main__':
 
