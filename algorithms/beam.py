@@ -34,12 +34,13 @@ class Beam(Algorithm):
     def evaluate_move(self, state, move:tuple[int,int,int], type:str, current_depth:int):
         new_state = copy.deepcopy(state)
         new_state.add_coordinate(new_state.amino_acids,move,type)
+        # self.temporary_states[new_state] = new_state.calculate_score()
 
         # evaluate a move by simulating future steps and calculating the predicted score
         predicted_score = self.simulate(new_state, self.lookahead_depth, current_depth)
-        self.temporary_states.append((new_state, predicted_score))
+        self.temporary_states.append((new_state,predicted_score))
 
-    def simulate(self, state, depth: int, current_depth:int):
+    def simulate(self, state, depth: int, current_depth: int):
 
         if depth == 0:
             return state.calculate_score()
@@ -80,5 +81,5 @@ class Beam(Algorithm):
 
 
     def finish_up(self):
-        self.protein = min(self.states, key=lambda x: x.calculate_score())
+        self.protein = min(self.states, key=lambda x:x.calculate_score())
         super().finish_up()
