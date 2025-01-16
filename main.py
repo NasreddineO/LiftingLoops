@@ -50,7 +50,14 @@ def run_experiment():
                 else:
                     P =Protein(sequence, output_file, threeD)
                     print('debug')
+<<<<<<< HEAD
+
+    print(scores)
+
+    best_protein.finish_up(output_file)
+=======
     best_protein.create_output(output_file)
+>>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
 
 

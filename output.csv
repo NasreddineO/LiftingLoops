@@ -1,18 +1,9 @@
 amino,fold
 H,1
-<<<<<<< HEAD
 H,0
 score,-18
 =======
-H,1
-P,-2
-H,-1
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 47e011b16b2fe08c45f2822c810a460db0bc95ec
+>>>>>>> 275ca5b772e5e1231f72d5bc7dbf7c9cea0116ad
 H,-1
 H,-1
 P,2
@@ -28,6 +19,6 @@ score,-6
 <<<<<<< HEAD
 >>>>>>> 47e011b16b2fe08c45f2822c810a460db0bc95ec
 =======
->>>>>>> 47e011b16b2fe08c45f2822c810a460db0bc95ec
+>>>>>>> 275ca5b772e5e1231f72d5bc7dbf7c9cea0116ad
 score,-1
 >>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
