@@ -12,7 +12,7 @@ import argparse
 def run_trial(protein: Protein):
 
     # initialize an algorithm
-    algorithm = Beam(protein, 1)
+    algorithm = Beam(protein, 5000)
 
     # run the algorithm for each node to add
     for amino_acid in range(len(protein.sequence)-2):
