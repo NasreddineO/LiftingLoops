@@ -3,20 +3,21 @@
 # This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
 
 from classes.protein_class import Protein
+from classes.visualise_class import Visualise
 from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
 from algorithms.random_greedy import Random_Greedy
 from algorithms.beam import Beam
 import argparse
+import matplotlib.pyplot as plt
 
 def run_trial(protein: Protein):
+    # Initialize an algorithm
+    algorithm = Random(protein)
 
-    # initialize an algorithm
-    algorithm = Beam(protein, 5000)
-
-    # run the algorithm for each node to add
+    # Run the algorithm for each node to add
     for amino_acid in range(len(protein.sequence)-2):
-        algorithm.step(protein.sequence[amino_acid+2], amino_acid+1)
+        algorithm.step(protein.sequence[amino_acid+2])
 
     return algorithm
 
@@ -28,17 +29,17 @@ def run_experiment():
 
     for i in range(iterations):
 
-        # initialize Protein
+        # Initialize Protein
         P = Protein(sequence, output_file, threeD)
 
         success = False
         while not success:
                 algorithm = run_trial(P)
+                algorithm.finish_up()
 
                 # NOTA BENE this needs to be fixed
-                if len(algorithm.protein.amino_acids) != len(sequence):
+                if len(algorithm.protein.amino_acids) == len(sequence):
                     success = True
-                    algorithm.finish_up()
                     score = algorithm.protein.calculate_score()
                     scores.append(score)
 
@@ -48,11 +49,12 @@ def run_experiment():
 
                 # reset the protein if we get a fatal error
                 else:
-                    P =Protein(sequence, output_file, threeD)
-                    print('debug')
+                    P = Protein(sequence, output_file, threeD)
+                    # print('debug')
+
+    Visualise.analysis(P.sequence, scores)
     best_protein.create_output(output_file)
-
-
+    plt.show()
 
 if __name__ == '__main__':
 

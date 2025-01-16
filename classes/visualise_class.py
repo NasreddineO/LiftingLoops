@@ -4,6 +4,11 @@ from matplotlib.lines import Line2D
 from collections import OrderedDict
 import csv
 
+from scipy.stats import gaussian_kde
+import numpy as np
+from collections import Counter
+from scipy.interpolate import make_interp_spline
+
 class Visualise():
     """
     A class to visualize protein folds in 2D or 3D space, using data from a Protein instance.
@@ -93,12 +98,9 @@ class Visualise():
         legend_handles = scatter_handles + line_handles
 
         plt.legend(handles=legend_handles, loc='upper left', bbox_to_anchor=(1.05, 1), borderaxespad=0.)
-        # ax.axis('off')
         plt.tight_layout()
-        plt.show()
 
-
-    def data_to_csv(dict: OrderedDict, folds: list, output_file: str, protein):
+    def data_to_csv(dict: OrderedDict, folds: list[int], output_file: str, protein):
         """
         Extracts the type of aminoacid (string) and the corresponding fold (int) from a dictionary
         and writes it to a CSV-file.
@@ -124,3 +126,70 @@ class Visualise():
             file.write(f"score,{score}")
 
         print(f"CSV file created successfully.")
+
+    def analysis(protein, scores: list[int]):
+        """
+        Generates a bar plot with a smooth curve for the frequency distribution of scores.
+
+        This function visualizes the frequency of unique scores for a given protein as a bar plot.
+        It also overlays a smooth curve using cubic spline interpolation to represent the overall trend.
+
+        Parameters:
+            protein (class): A protein object
+            scores (list of int): A list of integer scores to analyze and visualize.
+
+        Behavior:
+            - Counts the frequencies of unique scores.
+            - Creates a bar plot representing the frequency distribution.
+            - Generates a smooth curve using cubic spline interpolation.
+            - Adds appropriate titles, labels, and gridlines for clarity.
+            - Saves the generated plot as a PNG file in the current directory with a filename format:
+              "<protein>_<number_of_scores>_iterations.png".
+
+        The plot is displayed interactively using matplotlib.
+
+        Returns:
+            None
+        """
+        # Count the frequencies of unique integers
+        counter = Counter(scores)
+
+        # Extract keys (unique scores) and values (frequencies)
+        unique_scores = sorted(counter.keys())
+        frequencies = [counter[score] for score in unique_scores]
+
+        # Plot the frequencies
+        plt.figure(figsize=(10, 6))
+        bars = plt.bar(unique_scores, frequencies, color='skyblue', edgecolor='black')
+
+        # Normalize the frequencies between 0 and 1
+        normalized_frequencies = [f / max(frequencies) for f in frequencies]
+
+        # Use a colormap to set bar colors based on normalized frequencies
+        cm = plt.cm.Blues
+
+        # Set bar colors based on the normalized frequencies
+        for intensity, patch in zip(normalized_frequencies, bars):
+            # 0.3 is the base color, 0.7 * intensity adjusts the color intensity
+            plt.setp(patch, 'facecolor', cm(0.3 + 0.7 * intensity))
+
+        # Generate a smooth curve using cubic spline interpolation
+        x_smooth = np.linspace(min(unique_scores), max(unique_scores), 500)
+        spline = make_interp_spline(unique_scores, frequencies, k=3)
+        y_smooth = spline(x_smooth)
+
+        # Plot the smooth curve
+        plt.plot(x_smooth, y_smooth, color='red', linewidth=2, label='Smooth Curve')
+
+        # Labels and title
+        plt.title(f'Frequency of Scores for Protein: {protein} in {len(scores)} iterations', fontsize=10)
+        plt.xlabel('Score', fontsize=10)
+        plt.ylabel('Frequency', fontsize=10)
+
+        # Add gridlines
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Show and save the plot
+        filename = f"{protein}_{len(scores)}_iterations.png"
+        plt.tight_layout()
+        plt.savefig(filename)
