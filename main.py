@@ -12,11 +12,15 @@ import argparse
 def run_trial(protein: Protein):
 
     # initialize an algorithm
+<<<<<<< HEAD
     algorithm = Beam(protein, 100)
+=======
+    algorithm = Beam(protein, 1)
+>>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
     # run the algorithm for each node to add
-    for amino_acid in protein.sequence[2:]:
-        algorithm.step(amino_acid)
+    for amino_acid in range(len(protein.sequence)-2):
+        algorithm.step(protein.sequence[amino_acid+2], amino_acid+1)
 
     return algorithm
 
@@ -33,22 +37,39 @@ def run_experiment():
 
         success = False
         while not success:
-            try:
                 algorithm = run_trial(P)
+<<<<<<< HEAD
                 print(len(algorithm.protein.amino_acids))
                 success = True
                 score = P.calculate_score()
                 scores.append(score)
+=======
+>>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
-                if score <= best_score:
-                    best_score = score
-                    best_protein = algorithm
+                # NOTA BENE this needs to be fixed
+                if len(algorithm.protein.amino_acids) != len(sequence):
+                    success = True
+                    algorithm.finish_up()
+                    score = algorithm.protein.calculate_score()
+                    scores.append(score)
 
+<<<<<<< HEAD
             # reset the protein if we get a fatal error
             except IndexError:
                 P =Protein(sequence, output_file, threeD)
     
     best_protein.finish_up(output_file)
+=======
+                    if score <= best_score:
+                        best_score = score
+                        best_protein = algorithm
+
+                # reset the protein if we get a fatal error
+                else:
+                    P =Protein(sequence, output_file, threeD)
+                    print('debug')
+    best_protein.create_output(output_file)
+>>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
 if __name__ == '__main__':
 
