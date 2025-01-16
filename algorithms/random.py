@@ -6,7 +6,9 @@ class Random(Algorithm):
     def __init__(self, protein):
         super().__init__(protein)
 
-
+    def run(self):
+        for amino_acid in range(len(self.protein.sequence)-2):
+            self.step(self.protein.sequence[amino_acid+2])
 
     def step(self, type: str):
         legal_moves = self.check_legal_moves(self.protein.amino_acids)

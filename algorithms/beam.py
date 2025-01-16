@@ -12,6 +12,10 @@ class Beam(Algorithm):
         # control how many steps ahead the algorithm evaluates
         self.lookahead_depth = lookahead_depth
 
+    def run(self):
+        for amino_acid in range(len(self.protein.sequence)-2):
+            self.step(self.protein.sequence[amino_acid+2], amino_acid+1)
+
 
     def step(self, type: str, current_depth: int):
 
@@ -28,7 +32,6 @@ class Beam(Algorithm):
 
         # prune next possible states
         self.prune_states()
-        print('debug')
 
 
     def evaluate_move(self, state, move:tuple[int,int,int], type:str, current_depth:int):
@@ -47,6 +50,11 @@ class Beam(Algorithm):
 
         # because protein is initialized with 2, the actual current depth is always 2 more than current_depth
         if current_depth+2 == len(self.protein.sequence):
+            return state.calculate_score()
+
+        # score cannot improve if there are only 'H' amino acids remaining
+        proteins_to_go = set(self.protein.sequence[current_depth+2:])
+        if proteins_to_go == set('P'):
             return state.calculate_score()
 
         # generate legal moves for the current state

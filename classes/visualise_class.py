@@ -4,7 +4,7 @@ from matplotlib.lines import Line2D
 from collections import OrderedDict
 import csv
 
-from scipy.stats import gaussian_kde
+from scipy.stats import norm
 import numpy as np
 from collections import Counter
 from scipy.interpolate import make_interp_spline
@@ -141,9 +141,9 @@ class Visualise():
         Behavior:
             - Counts the frequencies of unique scores.
             - Creates a bar plot representing the frequency distribution.
-            - Generates a smooth curve using cubic spline interpolation.
+            - Generates a smooth curve using a Gaussian distribution.
             - Adds appropriate titles, labels, and gridlines for clarity.
-            - Saves the generated plot as a PNG file in the current directory with a filename format:
+            - Saves the generated plot as a PNG file in the analysis folder with a filename format:
               "<protein>_<number_of_scores>_iterations.png".
 
         The plot is displayed interactively using matplotlib.
@@ -173,23 +173,39 @@ class Visualise():
             # 0.3 is the base color, 0.7 * intensity adjusts the color intensity
             plt.setp(patch, 'facecolor', cm(0.3 + 0.7 * intensity))
 
-        # Generate a smooth curve using cubic spline interpolation
-        x_smooth = np.linspace(min(unique_scores), max(unique_scores), 500)
-        spline = make_interp_spline(unique_scores, frequencies, k=3)
-        y_smooth = spline(x_smooth)
+        # Display frequency as text above the bars
+        for bar, frequency in zip(bars, frequencies):
+            bar_height = bar.get_height()
+            plt.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar_height,
+                f'{frequency}',
+                ha='center',
+                va='bottom',
+                fontsize=9,
+                color='black'
+            )
 
-        # Plot the smooth curve
-        plt.plot(x_smooth, y_smooth, color='red', linewidth=2, label='Smooth Curve')
+        # Calculate Gaussian distribution
+        mean = np.mean(scores)
+        std_dev = np.std(scores)
+        x_gaussian = np.linspace(min(unique_scores), max(unique_scores), 500)
+        y_gaussian = norm.pdf(x_gaussian, mean, std_dev) * max(frequencies)
+        plt.plot(x_gaussian, y_gaussian, color='red', linestyle='--', linewidth=2, label='Gaussian Fit')
 
         # Labels and title
         plt.title(f'Frequency of Scores for Protein: {protein} in {len(scores)} iterations', fontsize=10)
         plt.xlabel('Score', fontsize=10)
         plt.ylabel('Frequency', fontsize=10)
 
+        # Set x-ticks to be the unique scores + all integers between min and max scores
+        all_x_ticks = np.arange(min(unique_scores), max(unique_scores) + 1)
+        plt.xticks(all_x_ticks)
+
         # Add gridlines
         plt.grid(axis='y', linestyle='--', alpha=0.7)
 
         # Show and save the plot
-        filename = f"{protein}_{len(scores)}_iterations.png"
+        filename = f"analysis/{protein}_{len(scores)}_iterations.png"
         plt.tight_layout()
         plt.savefig(filename)

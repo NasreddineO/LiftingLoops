@@ -15,9 +15,16 @@ def run_trial(protein: Protein):
     # Initialize an algorithm
     algorithm = Random(protein)
 
-    # Run the algorithm for each node to add
-    for amino_acid in range(len(protein.sequence)-2):
-        algorithm.step(protein.sequence[amino_acid+2])
+    beam = False
+    if beam == True:
+
+        # initialize an algorithm
+        algorithm = Beam(protein, 1, 1)
+        algorithm.run()
+
+    if beam == False:
+        algorithm = Random(protein)
+        algorithm.run()
 
     return algorithm
 
