@@ -55,6 +55,7 @@ def run_experiment():
                     P =Protein(sequence, output_file, threeD)
                     print('debug')
     best_protein.create_output(output_file)
+    algorithm.calculate_protein(algorithm.protein.folds)
 
 
 

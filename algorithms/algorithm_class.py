@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from classes.visualise_class import Visualise
+from classes.protein_class import Protein
 
 class Algorithm():
     def __init__(self, protein):
@@ -50,7 +51,7 @@ class Algorithm():
         Visualise.draw(self.protein)
 
     def calculate_folds(self):
-        
+
         if len(self.protein.amino_acids) == len(self.protein.sequence):
 
             for amino_acid in range(len(self.protein.amino_acids)-1):
@@ -73,3 +74,29 @@ class Algorithm():
                 self.protein.folds.append(fold)
         else:
             pass
+
+    def calculate_protein(self, folds:list[int]):
+        x,y,z = 1,0,0
+
+        new_protein = Protein(self.protein.sequence, self.protein.output_file, self.protein.threeD)
+
+        # We wish to avoid 3 folds, namely the first two which are initialized as base cases and the last 0 fold.
+        for fold in range(len(folds)-3):
+
+            # Avoiding the first 2 folds by adding two to the index
+            if folds[fold+2] == 1:
+                x += 1
+            elif folds[fold+2] == -1:
+                x -= 1
+            elif folds[fold+2] == 2:
+                y += 1
+            elif folds[fold+2] == -2:
+                y -= 1
+            elif folds[fold+2] == 3:
+                z += 1
+            elif folds[fold+2] == -3:
+                z -= 1
+
+            new_protein.add_coordinate(new_protein.amino_acids, (x,y,z), self.protein.sequence[fold])
+
+        print(new_protein.amino_acids)
