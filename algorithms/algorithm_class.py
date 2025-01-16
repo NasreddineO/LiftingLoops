@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from classes.visualise_class import Visualise
+# from classes.visualise2 import Visualise
 
 class Algorithm():
     def __init__(self, protein):
@@ -26,5 +28,5 @@ class Algorithm():
         # the final fold is no direction, because there is no next direction
         self.protein.folds.append(0)
 
-        self.protein.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file)
-        self.protein.visualise(self.protein.amino_acids)
+        Visualise.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file, self.protein)
+        Visualise.draw(self.protein)
