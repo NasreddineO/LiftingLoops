@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from classes.visualise_class import Visualise
-# from classes.visualise2 import Visualise
 
 class Algorithm():
     def __init__(self, protein):
@@ -19,9 +18,6 @@ class Algorithm():
 
         legal_moves -= dict.keys()
 
-<<<<<<< HEAD
-        return legal_moves
-=======
         # remove moves
         moves_to_remove = set()
         for x,y,z in legal_moves:
@@ -37,7 +33,6 @@ class Algorithm():
         #pass None if no legal moves are found
         else:
             return None
->>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
 
 
@@ -49,14 +44,10 @@ class Algorithm():
         # the final fold is no direction, because there is no next direction
         self.protein.folds.append(0)
 
-<<<<<<< HEAD
-        Visualise.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file, self.protein)
-        Visualise.draw(self.protein)
-=======
     def create_output(self, output_file: str):
 
-        self.protein.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file)
-        self.protein.visualise(self.protein.amino_acids)
+        Visualise.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file, self.protein)
+        Visualise.draw(self.protein)
 
     def calculate_folds(self):
         for amino_acid in range(len(self.protein.amino_acids)-1):
@@ -77,4 +68,3 @@ class Algorithm():
                 fold = -3
 
             self.protein.folds.append(fold)
->>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
