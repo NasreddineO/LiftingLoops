@@ -1,21 +1,20 @@
 from collections import OrderedDict
+from classes.visualise_class import Visualise
 
 class Algorithm():
     def __init__(self, protein):
         self.protein = protein
 
-
-
     def check_legal_moves(self, dict: OrderedDict):
-
         x, y, z = next(reversed(dict))
-        # 3D
+        # 3D:
         legal_moves = set([
-        (x + 1, y, z), (x - 1, y, z),
-        (x, y + 1, z), (x, y - 1, z)])
+            (x + 1, y, z), (x - 1, y, z),
+            (x, y + 1, z), (x, y - 1, z)])
 
         if self.protein.threeD:
             legal_moves.update([(x, y, z + 1), (x, y, z - 1)])
+
 
         legal_moves -= dict.keys()
 
@@ -47,8 +46,8 @@ class Algorithm():
 
     def create_output(self, output_file: str):
 
-        self.protein.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file)
-        self.protein.visualise(self.protein.amino_acids)
+        Visualise.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file, self.protein)
+        Visualise.draw(self.protein)
 
     def calculate_folds(self):
         for amino_acid in range(len(self.protein.amino_acids)-1):

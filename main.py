@@ -80,17 +80,12 @@ if __name__ == '__main__':
     help="A flag that changes the algorithm to work in three-dimensional space rather than two-dimensional space"
     )
 
-
-
     # convert to variables for legibility
     args = parser.parse_args()
     sequence = args.sequence
     output_file = args.output_file
     iterations = int(args.iterations)
     threeD = args.threeD
-
-
-
 
     # check for correct input types:
     if not type(sequence) is str:
@@ -107,7 +102,5 @@ if __name__ == '__main__':
 
     if not type(threeD) is bool:
         raise TypeError("Please enter a boolean for adding a 3rd dimension")
-
-
 
     run_experiment()
