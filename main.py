@@ -12,11 +12,11 @@ import argparse
 def run_trial(protein: Protein):
 
     # initialize an algorithm
-    algorithm = Random(protein)
+    algorithm = Beam(protein, 1)
 
     # run the algorithm for each node to add
-    for amino_acid in protein.sequence[2:]:
-        algorithm.step(amino_acid)
+    for amino_acid in range(len(protein.sequence)-2):
+        algorithm.step(protein.sequence[amino_acid+2], amino_acid+1)
 
     return algorithm
 
@@ -35,9 +35,11 @@ def run_experiment():
         while not success:
                 algorithm = run_trial(P)
 
-                if len(algorithm.protein.amino_acids) == len(sequence):
+                # NOTA BENE this needs to be fixed
+                if len(algorithm.protein.amino_acids) != len(sequence):
                     success = True
-                    score = P.calculate_score()
+                    algorithm.finish_up()
+                    score = algorithm.protein.calculate_score()
                     scores.append(score)
 
                     if score <= best_score:
@@ -48,10 +50,14 @@ def run_experiment():
                 else:
                     P =Protein(sequence, output_file, threeD)
                     print('debug')
+<<<<<<< HEAD
 
     print(scores)
 
     best_protein.finish_up(output_file)
+=======
+    best_protein.create_output(output_file)
+>>>>>>> a196a45320f5a366ad0812726612f2b8f8d3f703
 
 
 
@@ -112,8 +118,3 @@ if __name__ == '__main__':
 
 
     run_experiment()
-    #P = Protein(sequence, output_file, threeD)
-    #beam = Beam(P, 3)
-    #beam.step('P')
-    #beam.step('H')
-    #beam.finish_up(output_file)
