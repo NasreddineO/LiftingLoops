@@ -2,11 +2,13 @@ from collections import OrderedDict
 from queue import Queue
 import copy
 from .algorithm_class import Algorithm
+from classes.protein_class import Protein
 
 class Beam(Algorithm):
-    def __init__(self, protein, max_size: int, lookahead_depth: int = 5):
-        super().__init__(protein)
-        self.states = [protein]
+    def __init__(self, sequence: str, max_size: int, output_file: str, threeD: bool, lookahead_depth: int = 5):
+        super().__init__(sequence, 1, output_file, threeD)
+        self.protein = Protein(sequence, output_file, threeD)
+        self.states = [self.protein]
         self.max_size = max_size
 
         # control how many steps ahead the algorithm evaluates
@@ -16,6 +18,8 @@ class Beam(Algorithm):
         for amino_acid in range(len(self.protein.sequence)-2):
             self.step(self.protein.sequence[amino_acid+2], amino_acid+1)
 
+        self.finish_up()
+        return self.protein.calculate_score()
 
     def step(self, type: str, current_depth: int):
 

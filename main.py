@@ -9,56 +9,6 @@ from algorithms.random_greedy import Random_Greedy
 from algorithms.beam import Beam
 import argparse
 
-def run_trial(protein: Protein):
-
-    beam = True
-    if beam == True:
-
-        # initialize an algorithm
-        algorithm = Beam(protein, 1, 1)
-        algorithm.run()
-
-    if beam == False:
-        algorithm = Random(protein)
-        algorithm.run()
-
-    return algorithm
-
-def run_experiment():
-
-    best_score = 0
-    best_protein = None
-    scores = []
-
-    for i in range(iterations):
-
-        # initialize Protein
-        P = Protein(sequence, output_file, threeD)
-
-        success = False
-        while not success:
-                algorithm = run_trial(P)
-                algorithm.finish_up()
-
-                # NOTA BENE this needs to be fixed
-                if len(algorithm.protein.amino_acids) == len(sequence):
-                    success = True
-                    score = algorithm.protein.calculate_score()
-                    scores.append(score)
-
-                    if score <= best_score:
-                        best_score = score
-                        best_protein = algorithm
-
-                # reset the protein if we get a fatal error
-                else:
-                    P =Protein(sequence, output_file, threeD)
-                    print('debug')
-    best_protein.create_output(output_file)
-    algorithm.calculate_protein(algorithm.protein.folds)
-
-
-
 if __name__ == '__main__':
 
     # parse the input sequence
@@ -88,8 +38,8 @@ if __name__ == '__main__':
     # convert to variables for legibility
     args = parser.parse_args()
     sequence = args.sequence
-    output_file = args.output_file
     iterations = int(args.iterations)
+    output_file = args.output_file
     threeD = args.threeD
 
     # check for correct input types:
@@ -108,4 +58,8 @@ if __name__ == '__main__':
     if not type(threeD) is bool:
         raise TypeError("Please enter a boolean for adding a 3rd dimension")
 
-    run_experiment()
+     # --------------------------- Random ---------------------------------------
+    Random(sequence, iterations, output_file, threeD).run_experiment()
+
+     # --------------------------- Beam (with lookahead) ---------------------------------------
+    Beam(sequence, iterations, output_file, threeD).run_experiment()
