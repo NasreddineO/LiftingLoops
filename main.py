@@ -65,3 +65,4 @@ if __name__ == '__main__':
 
      # --------------------------- Beam (with lookahead) ---------------------------------------
     Beam(sequence, iterations, output_file, threeD).run_experiment()
+    plt.show()
