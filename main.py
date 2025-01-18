@@ -3,11 +3,13 @@
 # This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
 
 from classes.protein_class import Protein
+from classes.visualise_class import Visualise
 from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
 from algorithms.random_greedy import Random_Greedy
 from algorithms.beam import Beam
 import argparse
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
