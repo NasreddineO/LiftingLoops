@@ -3,8 +3,26 @@ from classes.visualise_class import Visualise
 from classes.protein_class import Protein
 
 class Algorithm():
-    def __init__(self, protein):
-        self.protein = protein
+    def __init__(self, sequence: str, iterations: int, output_file: str, threeD: bool):
+
+        self.sequence = sequence
+        self.iterations = iterations
+        self.output_file = output_file
+        self.threeD = threeD
+
+        self.best_score = 0
+        self.best_protein = None
+        self.scores = []
+
+    def run_experiment(self):
+        for i in range(self.iterations):
+            score = self.run()
+
+            if score <= self.best_score:
+                self.best_score = score
+                self.best_protein = self.protein
+
+        self.create_output(self.output_file)
 
     def check_legal_moves(self, dict: OrderedDict):
         x, y, z = next(reversed(dict))
@@ -48,8 +66,8 @@ class Algorithm():
 
     def create_output(self, output_file: str):
 
-        Visualise.data_to_csv(self.protein.amino_acids, self.protein.folds, output_file, self.protein)
-        Visualise.draw(self.protein)
+        Visualise.data_to_csv(self.best_protein.amino_acids, self.best_protein.folds, output_file, self.best_protein)
+        Visualise.draw(self.best_protein)
 
     def calculate_folds(self):
 

@@ -1,14 +1,28 @@
 from .algorithm_class import Algorithm
+from classes.protein_class import Protein
 from collections import OrderedDict
 import random
 
 class Random(Algorithm):
-    def __init__(self, protein):
-        super().__init__(protein)
+    def __init__(self, sequence: str,  iterations: int, output_file: str, threeD: bool):
+        super().__init__(sequence, iterations, output_file, threeD)
 
     def run(self):
-        for amino_acid in range(len(self.protein.sequence)-2):
-            self.step(self.protein.sequence[amino_acid+2])
+
+        self.protein = Protein(self.sequence, self.output_file, self.threeD)
+        success = False
+
+        while not success:
+            for amino_acid in range(len(self.protein.sequence)-2):
+                self.step(self.protein.sequence[amino_acid+2])
+                self.finish_up()
+
+            if len(self.protein.amino_acids) == len(self.protein.sequence):
+                success = True
+                score = self.protein.calculate_score()
+                self.scores.append(score)
+
+        return score
 
     def step(self, type: str):
         legal_moves = self.check_legal_moves(self.protein.amino_acids)
