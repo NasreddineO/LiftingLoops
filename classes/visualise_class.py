@@ -1,19 +1,16 @@
 import matplotlib.pyplot as plt
+import csv
+import numpy as np
+from scipy.stats import norm
+from collections import Counter
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.lines import Line2D
 from collections import OrderedDict
-import csv
-
-from scipy.stats import norm
-import numpy as np
-from collections import Counter
-from scipy.interpolate import make_interp_spline
 
 class Visualise():
     """
     A class to visualize protein folds in 2D or 3D space, using data from a Protein instance.
     """
-
     def draw(protein):
         """
         Visualize a protein fold in 2D or 3D space.
