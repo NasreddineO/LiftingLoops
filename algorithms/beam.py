@@ -5,7 +5,7 @@ from .algorithm_class import Algorithm
 from classes.protein_class import Protein
 
 class Beam(Algorithm):
-    def __init__(self, sequence: str, max_size: int, output_file: str, threeD: bool, lookahead_depth: int = 5):
+    def __init__(self, sequence: str, max_size: int, output_file: str, threeD: bool, lookahead_depth: int = 0):
         super().__init__(sequence, 1, output_file, threeD)
         self.protein = Protein(sequence, output_file, threeD)
         self.states = [self.protein]
@@ -38,6 +38,7 @@ class Beam(Algorithm):
 
         # prune next possible states
         self.prune_states()
+        print('debug')
 
     def evaluate_move(self, state, move:tuple[int,int,int], type:str, current_depth:int):
         new_state = copy.deepcopy(state)

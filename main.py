@@ -8,6 +8,7 @@ from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
 from algorithms.random_greedy import Random_Greedy
 from algorithms.beam import Beam
+from algorithms.pull_move_climber import Climber
 import argparse
 import matplotlib.pyplot as plt
 
@@ -111,3 +112,21 @@ if __name__ == '__main__':
         raise Error("Algorithm is not implemented (yet)")
 
     plt.show()
+    
+     # --------------------------- Random ---------------------------------------
+    #Random(sequence, iterations, output_file, threeD).run_experiment()
+
+     # --------------------------- Beam (with lookahead) ---------------------------------------
+    Beam(sequence, iterations, output_file, threeD).run_experiment()
+    #plt.show()
+
+    P = Protein('HHPH', 'output.csv', False)
+    P.add_coordinate(P.amino_acids, (1,1,0), 'P')
+    P.add_coordinate(P.amino_acids, (2,1,0), 'H')
+
+
+    #Climber(sequence, iterations, output_file, threeD, P).run()
+
+    #test =Climber(sequence, iterations, output_file, threeD, P)
+
+    #print(test.is_legal([(1,-1,0),(1,0,0),(1,1,0),(2,1,0)]))
