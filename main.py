@@ -65,7 +65,7 @@ if __name__ == '__main__':
     #Random(sequence, iterations, output_file, threeD).run_experiment()
 
      # --------------------------- Beam (with lookahead) ---------------------------------------
-    #Beam(sequence, iterations, output_file, threeD).run_experiment()
+    Beam(sequence, iterations, output_file, threeD).run_experiment()
     #plt.show()
 
     P = Protein('HHPH', 'output.csv', False)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     P.add_coordinate(P.amino_acids, (2,1,0), 'H')
 
 
-    Climber(sequence, iterations, output_file, threeD, P).run()
+    #Climber(sequence, iterations, output_file, threeD, P).run()
 
     #test =Climber(sequence, iterations, output_file, threeD, P)
 

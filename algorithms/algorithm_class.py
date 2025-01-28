@@ -118,4 +118,6 @@ class Algorithm():
 
             new_protein.add_coordinate(new_protein.amino_acids, (x,y,z), self.protein.sequence[fold])
 
+        return new_protein
+        
         print(new_protein.amino_acids)
