@@ -15,7 +15,9 @@ class Beam(Algorithm):
         self.lookahead_depth = lookahead_depth
 
     def run(self):
+        self.progress_bar(0, len(self.protein.sequence)-2)
         for amino_acid in range(len(self.protein.sequence)-2):
+            self.progress_bar(amino_acid, len(self.protein.sequence)-2)
             self.step(self.protein.sequence[amino_acid+2], amino_acid+1)
 
         self.finish_up()
@@ -36,7 +38,6 @@ class Beam(Algorithm):
 
         # prune next possible states
         self.prune_states()
-
 
     def evaluate_move(self, state, move:tuple[int,int,int], type:str, current_depth:int):
         new_state = copy.deepcopy(state)
@@ -79,7 +80,6 @@ class Beam(Algorithm):
         # return the minimum score from the simulated future moves
         return min(scores)
 
-
     def prune_states(self):
         # add all states if below max_size
         if len(self.temporary_states) <= self.max_size:
@@ -90,8 +90,11 @@ class Beam(Algorithm):
             self.temporary_states.sort(key=lambda x: x[1])
             self.states = [self.temporary_states[x][0] for x in range(self.max_size)]
 
-
-
     def finish_up(self):
         self.protein = min(self.states, key=lambda x:x.calculate_score())
         super().finish_up()
+
+    def progress_bar(self, progress, total):
+        percent = 100 * (progress / float(total))
+        bar = chr(9608) * int(percent) + '-'* (100 - int(percent))
+        print(f"\r|{bar}| {percent: .2f}%", end="")

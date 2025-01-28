@@ -15,9 +15,10 @@ class Algorithm():
         self.scores = []
 
     def run_experiment(self):
+        # self.progress_bar(0, self.iterations)
         for i in range(self.iterations):
             score = self.run()
-
+            # self.progress_bar(i+1, self.iterations)
             if score <= self.best_score:
                 self.best_score = score
                 self.best_protein = self.protein
@@ -54,8 +55,6 @@ class Algorithm():
         else:
             return None
 
-
-
     def finish_up(self):
 
         # calculate the folds
@@ -67,7 +66,7 @@ class Algorithm():
     def create_output(self, output_file: str):
 
         Visualise.data_to_csv(self.best_protein.amino_acids, self.best_protein.folds, output_file, self.best_protein)
-        Visualise.draw(self.best_protein)
+        Visualise.draw(self.best_protein, self.best_score)
 
     def calculate_folds(self):
 
@@ -119,3 +118,8 @@ class Algorithm():
             new_protein.add_coordinate(new_protein.amino_acids, (x,y,z), self.protein.sequence[fold])
 
         print(new_protein.amino_acids)
+
+    # def progress_bar(self, progress, total):
+    #     percent = 100 * (progress / float(total))
+    #     bar = chr(9608) * int(percent) + '-'* (100 - int(percent))
+    #     print(f"\r|{bar}| {percent: .2f}%", end="")

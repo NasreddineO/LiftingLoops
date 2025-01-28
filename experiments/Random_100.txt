@@ -1,0 +1,5 @@
+Sequence=HHPHHHPHPHHHPH
+Algorithm=beam search
+Iterations=100
+Lookahead_depth=5
+

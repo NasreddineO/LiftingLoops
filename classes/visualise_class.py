@@ -11,7 +11,7 @@ class Visualise():
     """
     A class to visualize protein folds in 2D or 3D space, using data from a Protein instance.
     """
-    def draw(protein):
+    def draw(protein, score):
         """
         Visualize a protein fold in 2D or 3D space.
 
@@ -91,6 +91,9 @@ class Visualise():
         else:
             ax.set_title('2D Amino Acid Fold Visualization')
 
+        # Add score
+        plt.gcf().text(0.85, 0.5, f"score: {score}", fontsize=14)
+
         # Add legend
         legend_handles = scatter_handles + line_handles
 
@@ -122,7 +125,7 @@ class Visualise():
             score = protein.calculate_score()
             file.write(f"score,{score}")
 
-        print(f"CSV file created successfully.")
+        print(f"\nCSV file created successfully.")
 
     def analysis(protein, scores: list[int]):
         """

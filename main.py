@@ -11,19 +11,72 @@ from algorithms.beam import Beam
 import argparse
 import matplotlib.pyplot as plt
 
+def file_to_parameters(filename):
+    with open(f'{filename}', 'r') as file:
+        data = file.readlines()
+        sequence = data[0].split('=')[1].strip().upper()
+        algorithm = data[1].split('=')[1].strip().lower()
+        iterations = data[2].split('=')[1].strip()
+        lookahead_depth = data[3].split('=')[1].strip()
+
+        if lookahead_depth == None:
+            lookahead_depth = 0
+        else:
+            try:
+                lookahead_depth = int(lookahead_depth)
+            except:
+                raise TypeError("Please enter an integer for the lookahead depth")
+        try:
+            iterations = int(iterations)
+        except:
+            raise TypeError("Please enter an integer for the iterations")
+
+        return algorithm, sequence, iterations, lookahead_depth
+        # print(sequence, algorithm, iterations, lookahead_depth)
+
+def handle_error_conditions(sequence, algorithm, iterations, lookahead_depth):
+    """
+    Handles all the validation logic and shows relevant error messages for each input condition.
+    Returns True if any error occurs, otherwise False.
+    """
+    # Validate protein sequence
+    if not type(sequence) is str:
+        raise TypeError("Please enter a string as a sequence")
+    if sequence == "":
+        raise TypeError("Protein sequence cannot be empty!")
+    if len(sequence) < 2:
+        raise TypeError("Protein sequence must be longer than 2 amino acids!")
+    if any(char not in "HPC" for char in sequence):
+        raise TypeError("Protein sequence can only contain 'H', 'P', and 'C'.")
+
+    # Validate algorithm selection
+    if algorithm == "":
+        raise TypeError("Please select an algorithm.")
+    if algorithm == "Hill Climber":
+        raise TypeError("Hill Climber not yet implemented. Please select another one.")
+
+    # Validate algorithm-specific entry
+    if iterations == None:
+        if algorithm == "random":
+            raise TypeError("Please enter a value for the iterations.")
+        elif algorithm == "beam search":
+            raise TypeError("Please enter a value for the beams")
+        else:
+            print("To be finished")
+
+    if not type(output_file) is str:
+        raise TypeError("Please enter a string as a sequence")
+    if not type(threeD) is bool:
+        raise TypeError("Please enter a boolean for adding a 3rd dimension")
+
 if __name__ == '__main__':
 
     # parse the input sequence
     parser = argparse.ArgumentParser(description="A script to find the best protein fold")
 
     parser.add_argument(
-    'sequence',
-    help="An ordered string of letters, where each different letter stands for an amino acid of the type indicated by that letter"
-    )
-
-    parser.add_argument(
-    'iterations',
-    help="The number of iterations to run the experiment"
+    'experiment',
+    help="A .txt file containing the paramters that will be used by the algorithm"
     )
 
     parser.add_argument(
@@ -37,32 +90,24 @@ if __name__ == '__main__':
     help="A flag that changes the algorithm to work in three-dimensional space rather than two-dimensional space"
     )
 
-    # convert to variables for legibility
+    # # convert to variables for legibility
     args = parser.parse_args()
-    sequence = args.sequence
-    iterations = int(args.iterations)
+    experiment = args.experiment
     output_file = args.output_file
     threeD = args.threeD
+    algorithm, sequence, iterations, lookahead_depth = file_to_parameters(experiment)
 
-    # check for correct input types:
-    if not type(sequence) is str:
-        raise TypeError("Please enter a string as a sequence")
+    handle_error_conditions(sequence, algorithm, iterations, lookahead_depth)
 
-    if not len(sequence) > 1:
-        raise ValueError("Please enter a sequence of more than 1 amino acid. A sequence with only 1 amino acid is not a protein.")
+    # print(f"algorithm: {algorithm}: {type(algorithm)}, sequence:-{sequence}-: {type(sequence)}, iterations: {iterations}: {type(iterations)}, output_file: {output_file}: {type(output_file)}, {threeD}")
 
-    if not type(iterations) is int:
-        raise TypeError("Please enter an integer")
+    if algorithm == "random":
+        # --------------------------- Random ---------------------------------------
+        Random(sequence, iterations, output_file, threeD).run_experiment()
+    elif algorithm == "beam search":
+        # --------------------------- Beam (with lookahead) ---------------------------------------
+        Beam(sequence, iterations, output_file, threeD).run_experiment()
+    else:
+        raise Error("Algorithm is not implemented (yet)")
 
-    if not type(output_file) is str:
-        raise TypeError("Please enter a string as a sequence")
-
-    if not type(threeD) is bool:
-        raise TypeError("Please enter a boolean for adding a 3rd dimension")
-
-     # --------------------------- Random ---------------------------------------
-    Random(sequence, iterations, output_file, threeD).run_experiment()
-
-     # --------------------------- Beam (with lookahead) ---------------------------------------
-    Beam(sequence, iterations, output_file, threeD).run_experiment()
     plt.show()

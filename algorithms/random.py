@@ -11,7 +11,7 @@ class Random(Algorithm):
 
         self.protein = Protein(self.sequence, self.output_file, self.threeD)
         success = False
-
+        # iteration = 0
         while not success:
             for amino_acid in range(len(self.protein.sequence)-2):
                 self.step(self.protein.sequence[amino_acid+2])
@@ -21,7 +21,8 @@ class Random(Algorithm):
                 success = True
                 score = self.protein.calculate_score()
                 self.scores.append(score)
-
+            else:
+                self.protein = Protein(self.sequence, self.output_file, self.threeD)
         return score
 
     def step(self, type: str):
@@ -43,3 +44,8 @@ class Random(Algorithm):
         # pass None if no legal moves
         else:
             return None
+
+    # def progress_bar(self, progress, total):
+    #     percent = 100 * (progress / float(total))
+    #     bar = chr(9608) * int(percent) + '-'* (100 - int(percent))
+    #     print(f"\r|{bar}| {percent: .2f}%", end="")
