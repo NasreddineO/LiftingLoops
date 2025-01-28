@@ -73,9 +73,9 @@ class Algorithm():
 
         if len(self.protein.amino_acids) == len(self.protein.sequence):
 
-            for amino_acid in range(len(self.protein.amino_acids)-1):
-                x,y,z = list(self.protein.amino_acids.items())[amino_acid][0]
-                x_next, y_next, z_next = list(self.protein.amino_acids.items())[amino_acid+1][0]
+            for amino_acid in range(len(self.protein.amino_acids)-2):
+                x,y,z = list(self.protein.amino_acids.items())[amino_acid+1][0]
+                x_next, y_next, z_next = list(self.protein.amino_acids.items())[amino_acid+2][0]
 
                 if x_next - x == 1:
                     fold = 1

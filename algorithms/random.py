@@ -15,13 +15,15 @@ class Random(Algorithm):
         while not success:
             for amino_acid in range(len(self.protein.sequence)-2):
                 self.step(self.protein.sequence[amino_acid+2])
-                self.finish_up()
 
             if len(self.protein.amino_acids) == len(self.protein.sequence):
                 success = True
                 score = self.protein.calculate_score()
                 self.scores.append(score)
-
+                self.finish_up()
+                
+            else:
+                self.protein = Protein(self.sequence, self.output_file, self.threeD)
         return score
 
     def step(self, type: str):
