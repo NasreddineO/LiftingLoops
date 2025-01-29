@@ -22,12 +22,12 @@ Een vouwing wordt weergegeven door een csv met een rij voor elk aminozuur, waarb
   Dit algoritme bestaat uit 2 parameters, namelijk het aantal beams en de lookahead-diepte. Beam is exact hetzelfde als greedy met 1 beam, en exact hetzelfde als breadth-first met een oneindig aantal beams. Een beam-algoritme met een lookahead die net zo groot is als de lengte van het aminozuur is technisch gezien hetzelfde als depth-first, alleen dan heel veel slomer omdat het voor elk aminozuur weer opnieuw de hele boom zou moeten doorzoeken. Dit is dus niet aan te raden.
 
 ## Aanroepen algoritmen
-Om een algoritme aan te roepen, voer main.py out. Deze kent een aantal parameters. Ten eerste, een .txt file met op 4 rijen met in deze volgorde, waarbij de aanhalingstekens hier dienen als verduidelijking en moeten worden weggelaten, en in de haken de gewenste parameters:
+Om een algoritme aan te roepen, voer main.py out. Deze kent een aantal parameters. Ten eerste, een .txt file met op 4 rijen met in deze volgorde de parameters, waarbij de aanhalingstekens hier dienen als verduidelijking en moeten worden weggelaten, en in de haken de gewenste waarden:
 
-keten = [string van hoofdletters P,H en C]
-algoritme = ['random', 'random_folding' of 'beam']
-iteraties = [geheel getal]
-lookahead = [geheel getal of 'None']
+- keten = [string van hoofdletters P,H en C]
+- algoritme = ['random', 'random_folding' of 'beam']
+- iteraties = [geheel getal]
+- lookahead = [geheel getal of 'None']
 
 Let op: voor Beam staat iteraties NIET voor het aantal iteraties dat beam runt over de hele boom, maar voor het aantal beams. Lookahead is alleen geïmplementeerd voor Beam. Vul in 'None' voor alle andere algoritmen.
 
