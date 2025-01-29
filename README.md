@@ -25,7 +25,7 @@ Een vouwing wordt weergegeven door een csv met een rij voor elk aminozuur, waarb
 Om een algoritme aan te roepen, voer main.py out. Deze kent een aantal parameters. Ten eerste, een .txt file met op 4 rijen met in deze volgorde de parameters, waarbij de aanhalingstekens hier dienen als verduidelijking en moeten worden weggelaten, en in de haken de gewenste waarden:
 
 - keten = [string van hoofdletters P,H en C]
-- algoritme = ['random', 'random_folding' of 'beam']
+- algoritme = ['random', 'random_folding' of 'beam search']
 - iteraties = [geheel getal]
 - lookahead = [geheel getal of 'None']
 
