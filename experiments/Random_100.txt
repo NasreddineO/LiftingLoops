@@ -1,4 +1,4 @@
-Sequence=HHPHHHPHPHHHPH
-Algorithm=beam search
-Iterations=1000
+Sequence=HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH
+Algorithm=hill climber
+Iterations=100000
 Lookahead_depth=14

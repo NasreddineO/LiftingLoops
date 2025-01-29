@@ -8,7 +8,8 @@ from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
 from algorithms.random_greedy import Random_Greedy
 from algorithms.beam import Beam
-from algorithms.pull_move_climber import Climber
+# from algorithms.pull_move_climber import Climber
+from algorithms.hill_climber_test import Climber
 import argparse
 import matplotlib.pyplot as plt
 
@@ -96,8 +97,8 @@ if __name__ == '__main__':
         Random(sequence, iterations, output_file, threeD).run_experiment()
     elif algorithm == "beam search":
         Beam(sequence, iterations, output_file, threeD).run_experiment()
-    else:
-        raise NotImplementedError(f"Algorithm '{algorithm}' is not implemented yet.")
+    elif algorithm == "hill climber":
+        Climber(sequence, iterations, output_file, threeD).run_experiment()
 
     plt.show()
 
