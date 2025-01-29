@@ -81,16 +81,15 @@ class Protein():
         """
         return sum(abs(c1 - c2) for c1, c2 in zip(coordinate1, coordinate2)) == 1
 
-    def add_coordinate(self, dict: OrderedDict, coordinate: tuple[int, int, int], type: str):
+    def add_coordinate(self, coordinate: tuple[int, int, int], type: str):
         """
         Adds a new amino acid coordinate and type to the provided dictionary.
 
         Parameters:
-            dict (OrderedDict): The dictionary to which the coordinate should be added.
             coordinate (tuple): The (x, y, z) coordinates of the amino acid.
             type (str): The type of the amino acid ('H', 'P', 'C').
 
         This method ensures that the coordinate is not None before adding it to the dictionary.
         """
         if coordinate is not None:
-            dict[coordinate] = type
+            self.amino_acids[coordinate] = type
