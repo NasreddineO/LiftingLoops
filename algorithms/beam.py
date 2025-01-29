@@ -78,7 +78,7 @@ class Beam(Algorithm):
             current_depth: Current position in sequence processing
         """
         new_state = copy.deepcopy(state)
-        new_state.add_coordinate(new_state.amino_acids, move, type)
+        new_state.add_coordinate(move, type)
 
         # Calculate predicted score with lookahead simulation
         predicted_score = self.simulate(new_state, self.lookahead_depth, current_depth)
@@ -90,40 +90,40 @@ class Beam(Algorithm):
 
         Parameters:
             state: Current protein state to simulate from
-            remaining_depth: Remaining lookahead steps
+            depth: Remaining lookahead steps
             current_depth: Current position in sequence processing
 
         Returns:
             float: Predicted score for this state path
         """
-        # Base case: return current score when lookahead exhausted
+        # Base case: return current score when lookahead is exhausted
         if depth == 0:
             return state.calculate_score()
 
         # Early termination if at end of sequence (current_depth + 2 because we start at the 3rd amino_acid)
-        if current_depth + 2 == len(self.protein.sequence):
+        if current_depth + 2 >= len(self.protein.sequence):
             return state.calculate_score()
 
         # Check remaining amino acid types
         remaining_acids = set(self.protein.sequence[current_depth + 2:])
 
         # No additional points to score in this case
-        if remaining_acids == set('P'):
+        if remaining_acids == {'P'}:
             return state.calculate_score()
 
         # Generate legal moves for the current state
         legal_moves = self.check_legal_moves(state.amino_acids)
 
-        # If the move will inevitably result in a failure state, return 0 such that the state is not chosen.
-        if legal_moves:
-            return 0
+        # If no legal moves exist, return a large penalty (previously it returned 0, which might mislead selection)
+        if not legal_moves:
+            return float("inf")
 
         # Simulate each move and repeat calculating scores
         scores = []
         next_amino_type = self.protein.sequence[current_depth + 2]
         for move in legal_moves:
             simulated_state = copy.deepcopy(state)
-            simulated_state.add_coordinate(simulated_state.amino_acids, move, next_amino_type)
+            simulated_state.add_coordinate(move, next_amino_type) 
             scores.append(self.simulate(simulated_state, depth - 1, current_depth + 1))
 
         return min(scores)

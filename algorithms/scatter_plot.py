@@ -3,9 +3,9 @@ import numpy as np
 from algorithms.beam import Beam
 
 # define the protein sequence and experiment parameters
-protein_sequence = "HHPHHHPHPHHHPH"
+protein_sequence = "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC"
 output_file = "output.txt"
-threeD = True
+threeD = False
 
 # define the range of lookahead depths to test
 lookahead_depths = range(1, 11)
