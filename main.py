@@ -13,27 +13,19 @@ import argparse
 import matplotlib.pyplot as plt
 
 def file_to_parameters(filename):
-    with open(f'{filename}', 'r') as file:
-        data = file.readlines()
-        sequence = data[0].split('=')[1].strip().upper()
-        algorithm = data[1].split('=')[1].strip().lower()
-        iterations = data[2].split('=')[1].strip()
-        lookahead_depth = data[3].split('=')[1].strip()
-
-        if lookahead_depth == None:
-            lookahead_depth = 0
-        else:
-            try:
-                lookahead_depth = int(lookahead_depth)
-            except:
-                raise TypeError("Please enter an integer for the lookahead depth")
-        try:
-            iterations = int(iterations)
-        except:
-            raise TypeError("Please enter an integer for the iterations")
-
+    """
+    Parses the input file and extracts parameters.
+    """
+    try:
+        with open(filename, 'r') as file:
+            data = file.readlines()
+            sequence = data[0].split('=')[1].strip().upper()
+            algorithm = data[1].split('=')[1].strip().lower()
+            iterations = int(data[2].split('=')[1].strip())
+            lookahead_depth = int(data[3].split('=')[1].strip() or 0)
         return algorithm, sequence, iterations, lookahead_depth
-        # print(sequence, algorithm, iterations, lookahead_depth)
+    except (IndexError, ValueError) as e:
+        raise ValueError("Invalid input file format. Ensure all fields are correctly specified.") from e
 
 def handle_error_conditions(sequence, algorithm, iterations, lookahead_depth):
     """
@@ -43,12 +35,12 @@ def handle_error_conditions(sequence, algorithm, iterations, lookahead_depth):
     # Validate protein sequence
     if not type(sequence) is str:
         raise TypeError("Please enter a string as a sequence")
-    if sequence == "":
-        raise TypeError("Protein sequence cannot be empty!")
+    if not sequence:
+        raise ValueError("Protein sequence cannot be empty!")
     if len(sequence) < 2:
-        raise TypeError("Protein sequence must be longer than 2 amino acids!")
+        raise ValueError("Protein sequence must be longer than 2 amino acids!")
     if any(char not in "HPC" for char in sequence):
-        raise TypeError("Protein sequence can only contain 'H', 'P', and 'C'.")
+        raise ValueError("Protein sequence can only contain 'H', 'P', and 'C'.")
 
     # Validate algorithm selection
     if algorithm == "":
@@ -96,34 +88,30 @@ if __name__ == '__main__':
     experiment = args.experiment
     output_file = args.output_file
     threeD = args.threeD
-    algorithm, sequence, iterations, lookahead_depth = file_to_parameters(experiment)
 
+    algorithm, sequence, iterations, lookahead_depth = file_to_parameters(experiment)
     handle_error_conditions(sequence, algorithm, iterations, lookahead_depth)
 
-    # print(f"algorithm: {algorithm}: {type(algorithm)}, sequence:-{sequence}-: {type(sequence)}, iterations: {iterations}: {type(iterations)}, output_file: {output_file}: {type(output_file)}, {threeD}")
-
     if algorithm == "random":
-        # --------------------------- Random ---------------------------------------
         Random(sequence, iterations, output_file, threeD).run_experiment()
     elif algorithm == "beam search":
-        # --------------------------- Beam (with lookahead) ---------------------------------------
         Beam(sequence, iterations, output_file, threeD).run_experiment()
     else:
-        raise Error("Algorithm is not implemented (yet)")
+        raise NotImplementedError(f"Algorithm '{algorithm}' is not implemented yet.")
 
     plt.show()
-    
+
      # --------------------------- Random ---------------------------------------
     #Random(sequence, iterations, output_file, threeD).run_experiment()
 
      # --------------------------- Beam (with lookahead) ---------------------------------------
-    Beam(sequence, iterations, output_file, threeD).run_experiment()
-    #plt.show()
-
-    P = Protein('HHPH', 'output.csv', False)
-    P.add_coordinate(P.amino_acids, (1,1,0), 'P')
-    P.add_coordinate(P.amino_acids, (2,1,0), 'H')
-
+    # Beam(sequence, iterations, output_file, threeD).run_experiment()
+    # #plt.show()
+    #
+    # P = Protein('HHPH', 'output.csv', False)
+    # P.add_coordinate(P.amino_acids, (1,1,0), 'P')
+    # P.add_coordinate(P.amino_acids, (2,1,0), 'H')
+    #
 
     #Climber(sequence, iterations, output_file, threeD, P).run()
 

@@ -11,19 +11,20 @@ class Visualise():
     """
     A class to visualize protein folds in 2D or 3D space, using data from a Protein instance.
     """
+
+    @staticmethod
     def draw(protein, score):
         """
         Visualize a protein fold in 2D or 3D space.
 
         Parameters:
-            self: object
+            protein: object
                 An instance of the class containing the method, with attributes:
                 - `threeD` (bool): Indicates whether to visualize in 3D (True) or 2D (False).
                 - `adjacent_amino_acids` (dict): A dictionary mapping pairs of coordinates
                   to bond types (e.g., 'H-H', 'H-C').
-            dict: dict
-                A dictionary where keys are tuples of coordinates (x, y, z) and values
-                are amino acid types ('H', 'P', 'C').
+            score: float
+                The stability score of the protein.
 
         Behavior:
             - Plots the backbone of the folded protein.
@@ -34,127 +35,124 @@ class Visualise():
         Returns:
             None
         """
-        types = list(protein.amino_acids.values())
         amino_colors = {'H': 'red', 'P': 'yellow', 'C': 'blue'}
         line_colors = {'H-H': 'red', 'H-C': 'black', 'C-C': 'blue'}
         scatter_handles = []
         line_handles = []
         seen_line_types = set()
 
-        # Determine coordinates based on dimensionality
-        if protein.threeD:
-            coordinates = list(protein.amino_acids.keys())
-            x, y, z = zip(*coordinates)
-        else:
-            coordinates = [(x, y) for x, y, z in protein.amino_acids.keys()]
-            x, y = zip(*coordinates)
+        # Convert coordinates and types to NumPy arrays
+        coords = np.array(list(protein.amino_acids.keys()))
+        types = np.array(list(protein.amino_acids.values()))
 
         # Create figure
         fig = plt.figure(figsize=(10, 8))
         ax = fig.add_subplot(projection='3d' if protein.threeD else None)
 
-        # Scatter plot for amino acids
-        for coord, label in zip(coordinates, types):
-            scatter_args = {'s': 100, 'c': amino_colors[label], 'label': label}
-            sc = ax.scatter(*coord, **scatter_args) if protein.threeD else ax.scatter(*coord[:2], **scatter_args)
-            if label not in [handle.get_label() for handle in scatter_handles]:
-                scatter_handles.append(sc)
+        # Scatter plot for amino acids (grouped by type for legend clarity)
+        for type, color in amino_colors.items():
+            mask = (types == type)
+            if not np.any(mask):
+                continue
+            group_coords = coords[mask]
+            if protein.threeD:
+                sc = ax.scatter(group_coords[:, 0], group_coords[:, 1], group_coords[:, 2], color=color, s=100, label=type)
+            else:
+                sc = ax.scatter(group_coords[:, 0], group_coords[:, 1], color=color, s=100, label=type)
+            scatter_handles.append(sc)
 
         # Plotting the folded protein backbone
         if protein.threeD:
-            ax.plot(x, y, z, color='black', linewidth=3, alpha=0.6)
+            ax.plot(coords[:, 0], coords[:, 1], coords[:, 2], color='black', linewidth=3, alpha=0.6)
         else:
-            ax.plot(x, y, color='black', linewidth=3, alpha=0.6)
+            ax.plot(coords[:, 0], coords[:, 1], color='black', linewidth=3, alpha=0.6)
 
         # Plot dashed lines between adjacent amino acids
-        for (coord1, coord2), line_type in protein.adjacent_amino_acids.items():
-            line_color = line_colors[line_type]
-            if protein.threeD:
-                x1, y1, z1 = coord1
-                x2, y2, z2 = coord2
-                ax.plot([x1, x2], [y1, y2], [z1, z2], linestyle=':', color=line_color, linewidth=2)
-            else:
-                x1, y1, _ = coord1
-                x2, y2, _ = coord2
-                ax.plot([x1, x2], [y1, y2], linestyle=':', color=line_color, linewidth=2)
+        bond_coords = np.array([(coord1, coord2) for (coord1, coord2) in protein.adjacent_amino_acids.keys()])
+        bond_types = np.array([bond_type for bond_type in protein.adjacent_amino_acids.values()])
 
-            if line_type not in seen_line_types:
-                seen_line_types.add(line_type)
-                line_handles.append(Line2D([0], [0], color=line_color, linestyle=':', linewidth=2, label=f'{line_type} Bond'))
+        for bond, bond_type in zip(bond_coords, bond_types):
+            line_color = line_colors.get(bond_type)
+            x_vals, y_vals = bond[:, 0], bond[:, 1]
+            if protein.threeD:
+                z_vals = bond[:, 2]
+                ax.plot(x_vals, y_vals, z_vals, color=line_color, linestyle=':', linewidth=2)
+            else:
+                ax.plot(x_vals, y_vals, color=line_color, linestyle=':', linewidth=2)
+
+            if bond_type not in seen_line_types:
+                seen_line_types.add(bond_type)
+                line_handles.append(Line2D([], [], color=line_color, linestyle=':', linewidth=2, label=f'{bond_type} Bond'))
 
         # Add labels and title
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
+        ax.set_xlabel('X Axis')
+        ax.set_ylabel('Y Axis')
         if protein.threeD:
-            ax.set_zlabel('Z')
-            ax.set_title('3D Amino Acid Fold Visualization')
+            ax.set_zlabel('Z Axis')
+            ax.set_title(f'3D Protein Structure (Score: {score})')
         else:
-            ax.set_title('2D Amino Acid Fold Visualization')
-
-        # Add score
-        plt.gcf().text(0.85, 0.5, f"score: {score}", fontsize=14)
+            ax.set_title(f'2D Protein Structure (Score: {score})')
 
         # Add legend
-        legend_handles = scatter_handles + line_handles
+        all_handles = scatter_handles + line_handles
 
-        plt.legend(handles=legend_handles, loc='upper left', bbox_to_anchor=(1.05, 1), borderaxespad=0.)
+        plt.legend(handles=all_handles, loc='upper left', bbox_to_anchor=(1.05, 1))
         plt.tight_layout()
 
-    def data_to_csv(dict: OrderedDict, folds: list[int], output_file: str, protein):
+    @staticmethod
+    def data_to_csv(amino_data: OrderedDict, folds: list[int], output_file: str, protein):
         """
-        Extracts the type of aminoacid (string) and the corresponding fold (int) from a dictionary
-        and writes it to a CSV-file.
+        Writes amino acid types and their corresponding folds to a CSV file, including protein stability score.
 
-        Input:
-        - data (dict): a nested dictionary containing the coordinates of the aminoacids as keys
-                       and the type and fold as nested dictionaries.
+        Parameters:
+            amino_data (OrderedDict):
+                Keys: (x, y, z) coordinates as tuples
+                Values: Amino acid types ('H', 'P', 'C')
+            folds (list[int]):
+                List of fold directions corresponding to amino acids
+            output_file (str):
+                Path/filename for output CSV
+            protein (Protein):
+                Protein object containing calculate_score() method
 
         Output:
-        - protein_data.csv: a csv-file containing the type of aminoacid and the fold,
-                            including the final score for the stability of the protein
+            CSV file with structure:
+            - Header: ["amino", "fold"]
+            - Data rows: (amino acid type, fold direction)
+            - Final row: ["score", stability_score]
         """
-        with open(f"{output_file}", mode="w", newline="") as file:
 
+        with open(output_file, mode="w", newline="") as file:
             writer = csv.writer(file)
 
+            # Write header
             writer.writerow(["amino", "fold"])
 
-            for amino, fold in zip(dict.values(), folds):
+            # Write data rows
+            for amino, fold in zip(amino_data.values(), folds):
                 writer.writerow([amino, fold])
 
+            # Calculate and write score
             score = protein.calculate_score()
-            file.write(f"score,{score}")
+            writer.writerow(["score", score])
 
-        print(f"\nCSV file created successfully.")
+        print(f"\nSuccessfully created CSV file: {output_file}")
 
+    @staticmethod
     def analysis(protein, scores: list[int]):
         """
         Generates a bar plot with a smooth curve for the frequency distribution of scores.
 
-        This function visualizes the frequency of unique scores for a given protein as a bar plot.
-        It also overlays a smooth curve using cubic spline interpolation to represent the overall trend.
-
         Parameters:
-            protein (class): A protein object
-            scores (list of int): A list of integer scores to analyze and visualize.
+            protein (Protein): A protein object with __str__ method
+            scores (list[int]): List of integer scores to analyze
 
         Behavior:
-            - Counts the frequencies of unique scores.
-            - Creates a bar plot representing the frequency distribution.
-            - Generates a smooth curve using a Gaussian distribution.
-            - Adds appropriate titles, labels, and gridlines for clarity.
-            - Saves the generated plot as a PNG file in the analysis folder with a filename format:
-              "<protein>_<number_of_scores>_iterations.png".
-
-        The plot is displayed interactively using matplotlib.
-
-        Returns:
-            None
+            - Properly scales Gaussian curve
+            - Ensures plot clarity
         """
-        # Count the frequencies of unique integers
+        # Count frequencies
         counter = Counter(scores)
-
-        # Extract keys (unique scores) and values (frequencies)
         unique_scores = sorted(counter.keys())
         frequencies = [counter[score] for score in unique_scores]
 
@@ -162,50 +160,41 @@ class Visualise():
         plt.figure(figsize=(10, 6))
         bars = plt.bar(unique_scores, frequencies, color='skyblue', edgecolor='black')
 
-        # Normalize the frequencies between 0 and 1
-        normalized_frequencies = [f / max(frequencies) for f in frequencies]
-
-        # Use a colormap to set bar colors based on normalized frequencies
-        cm = plt.cm.Blues
+        # Create proper colormap scaling
+        cmap = plt.cm.Blues
+        max_freq = max(frequencies) or 1  # Prevent division by zero
+        normalized = [f/max_freq for f in frequencies]
 
         # Set bar colors based on the normalized frequencies
-        for intensity, patch in zip(normalized_frequencies, bars):
-            # 0.3 is the base color, 0.7 * intensity adjusts the color intensity
-            plt.setp(patch, 'facecolor', cm(0.3 + 0.7 * intensity))
+        for bar, intensity in zip(bars, normalized):
+            bar.set_facecolor(cmap(0.3 + 0.7 * intensity))
 
-        # Display frequency as text above the bars
-        for bar, frequency in zip(bars, frequencies):
-            bar_height = bar.get_height()
-            plt.text(
-                bar.get_x() + bar.get_width() / 2,
-                bar_height,
-                f'{frequency}',
-                ha='center',
-                va='bottom',
-                fontsize=9,
-                color='black'
-            )
+        for bar in bars:
+            height = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2, height,
+                     f'{height}', ha='center', va='bottom', fontsize=9)
 
         # Calculate Gaussian distribution
-        mean = np.mean(scores)
-        std_dev = np.std(scores)
-        x_gaussian = np.linspace(min(unique_scores), max(unique_scores), 500)
-        y_gaussian = norm.pdf(x_gaussian, mean, std_dev) * max(frequencies)
-        plt.plot(x_gaussian, y_gaussian, color='red', linestyle='--', linewidth=2, label='Gaussian Fit')
+        if len(scores) >= 2:
+            mean = np.mean(scores)
+            std = np.std(scores)
+            if std != 0:  # Skip Gaussian if all scores are identical
+                x = np.linspace(min(scores) - 1, max(scores) + 1, 500)
+                scale_factor = len(scores)
+                y = norm.pdf(x, mean, std) * scale_factor
+                plt.plot(x, y, 'r--', linewidth=2, label='Gaussian Fit')
 
-        # Labels and title
-        plt.title(f'Frequency of Scores for Protein: {protein} in {len(scores)} iterations', fontsize=10)
+        # Configure axes and labels
+        plt.title(f'Score Distribution: {protein.sequence} ({len(scores)} iterations)', fontsize=12)
         plt.xlabel('Score', fontsize=10)
         plt.ylabel('Frequency', fontsize=10)
-
-        # Set x-ticks to be the unique scores + all integers between min and max scores
-        all_x_ticks = np.arange(min(unique_scores), max(unique_scores) + 1)
-        plt.xticks(all_x_ticks)
-
-        # Add gridlines
+        plt.xticks(np.arange(min(unique_scores), max(unique_scores)+1))
         plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-        # Show and save the plot
-        filename = f"analysis/{protein}_{len(scores)}_iterations.png"
+        # Save and clean up
+        filename = f"analysis/{protein.sequence}_{len(scores)}_iterations.png"
         plt.tight_layout()
-        plt.savefig(filename)
+        plt.savefig(filename, dpi=300)
+        plt.close()
+
+        print(f"Saved analysis plot to {filename}")
