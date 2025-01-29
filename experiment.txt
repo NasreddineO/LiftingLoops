@@ -1,4 +1,4 @@
-sequence = HHPHHPHPH
-algo = beam search
-iterations = 1
-depth = None
+sequence = PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP
+algo = random_folding
+iterations = 10
+depth = 0

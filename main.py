@@ -6,7 +6,7 @@ from classes.protein_class import Protein
 from classes.visualise_class import Visualise
 from algorithms.algorithm_class import Algorithm
 from algorithms.random import Random
-from algorithms.random_greedy import Random_Greedy
+from algorithms.random_folding import RandomFolding
 from algorithms.beam import Beam
 # from algorithms.pull_move_climber import Climber
 from algorithms.hill_climber_test import Climber
@@ -95,6 +95,8 @@ if __name__ == '__main__':
 
     if algorithm == "random":
         Random(sequence, iterations, output_file, threeD).run_experiment()
+    elif algorithm == "random_folding":
+        RandomFolding(sequence, iterations, output_file, threeD).run_experiment()
     elif algorithm == "beam search":
         Beam(sequence, iterations, output_file, threeD).run_experiment()
     elif algorithm == "hill climber":

@@ -197,7 +197,7 @@ class Algorithm():
             x, y, z = x + dx, y + dy, z + dz
 
             # Add the new coordinate and amino acid to the protein
-            new_protein.add_coordinate(new_protein.amino_acids, (x, y, z), self.protein.sequence[i])
+            new_protein.add_coordinate((x, y, z), self.protein.sequence[i])
 
         return new_protein
 
