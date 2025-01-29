@@ -9,7 +9,7 @@ Eiwitten, oftewel proteïnen bestaan uit een keten van aminozuren. Voor o.a. med
 
 Aminozuren hebben naast hun positie ook nog een type. Deze worden weergegeven met de hoofdletter P, H en C, wat respectievelijk staat voor Polair, Hydrofoob en Cysteïne. Een eiwit kan dan worden weergegeven als een combinatie van deze letters, waarbij letters die naast elkaar staan aan elkaar verbonden zijn. De grondtoestand van een vouwing neemt af naarmate er waterstofbruggen worden gevormd. Voor het model betekent dat concreet dat er minpunten worden toegekend aan bepaalde combinaties van eiwitten die naast elkaar liggen, dat wil zeggen dat de Euclidische afstand tussen de coördinaten 1 is, maar niet verbonden zijn aan elkaar. Voor een waterstofbrug tussen 2 hydrofobe aminozuren wordt 1 minpunt toegekend, evenals voor een brug tussen een hydrofoob aminozuur en een cysteïne. Voor een waterstofbrug tussen 2 cysteïnen worden zelfs 5 minpunten toegekend.
 
-Een vouwing wordt weergegeven door een csv met een rij voor elk aminozuur, waarbij elke rij ten eerste bestaat uit het type aminozuur, en ten tweede uit een geheel getal dat de vouwrichting weergeeft. Een 1 staat voor een stap in de X-as, een 2 voor een stap in de Y-as, en een 3 voor een stap in de Z-as. Een negatief getal betekent een stap in dezelfde as, maar dan in de negatieve richting. Omgerekend naar mensentaal is -1 dus een stap naar "links" en 3 een stap naar "boven". Onderaan de csv staat ook de grondtoestand van het eiwit. Er wordt ook een plot gegenereerd van de oplossing. Deze wordt in principe niet opgeslagen, maar het staat de gebruiker vrij dit te doen vanuit matplotlib.
+Een vouwing wordt weergegeven door een csv met een rij voor elk aminozuur, waarbij elke rij ten eerste bestaat uit het type aminozuur, en ten tweede uit een geheel getal dat de vouwrichting weergeeft. Een 1 staat voor een stap in de X-as, een 2 voor een stap in de Y-as, en een 3 voor een stap in de Z-as. Een negatief getal betekent een stap in dezelfde as, maar dan in de negatieve richting. Omgerekend naar mensentaal is -1 dus een stap naar "links" en 3 een stap naar "boven". Onderaan de csv staat ook de grondtoestand van het eiwit. Er wordt ook een plot gegenereerd van de oplossing. Deze wordt in principe niet opgeslagen, maar het staat de gebruiker vrij dit te doen vanuit matplotlib. Een voorbeeld kan worden gevonden in deze directory onder de naam 'output.csv'.
 
 ## Algoritmen
 - Random
@@ -27,6 +27,7 @@ Om een algoritme aan te roepen, voer main.py out. Deze kent een aantal parameter
 - lookahead = [geheel getal of '0']
 
 Let op: voor Beam staat iteraties NIET voor het aantal iteraties dat beam runt over de hele boom, maar voor het aantal beams. Lookahead is alleen geïmplementeerd voor Beam. Vul in '0' voor alle andere algoritmen.
+Een voorbeeld kan worden gevonden in deze directory onder de naam 'experiment.txt'.
 
 De tweede parameter is de naam van de output file waarin de output moet worden opgeslagen. Dit moet een .csv file zijn, zoals output.csv o.i.d.
 
