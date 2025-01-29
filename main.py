@@ -1,15 +1,12 @@
 # Names: Hendrik DuPont, Jeppe Mul & Nasreddine Ouchene
-# This script contains an algorithm that folds a protein. It does so on the basis of a TBD algorithm.
+# This script calls algorithms that fold proteins.
 # This script is in partial fulfillment of the requirements for Algoritmen en Heuristieken at the University of Amsterdam.
 
 from classes.protein_class import Protein
 from classes.visualise_class import Visualise
 from algorithms.algorithm_class import Algorithm
-from algorithms.random import Random
 from algorithms.random_folding import RandomFolding
 from algorithms.beam import Beam
-# from algorithms.pull_move_climber import Climber
-from algorithms.hill_climber_test import Climber
 import argparse
 import matplotlib.pyplot as plt
 
@@ -94,30 +91,8 @@ if __name__ == '__main__':
     handle_error_conditions(sequence, algorithm, iterations, lookahead_depth)
 
     if algorithm == "random":
-        Random(sequence, iterations, output_file, threeD).run_experiment()
-    elif algorithm == "random_folding":
         RandomFolding(sequence, iterations, output_file, threeD).run_experiment()
     elif algorithm == "beam search":
         Beam(sequence, iterations, output_file, threeD).run_experiment()
-    elif algorithm == "hill climber":
-        Climber(sequence, iterations, output_file, threeD).run_experiment()
 
     plt.show()
-
-     # --------------------------- Random ---------------------------------------
-    #Random(sequence, iterations, output_file, threeD).run_experiment()
-
-     # --------------------------- Beam (with lookahead) ---------------------------------------
-    # Beam(sequence, iterations, output_file, threeD).run_experiment()
-    # #plt.show()
-    #
-    # P = Protein('HHPH', 'output.csv', False)
-    # P.add_coordinate(P.amino_acids, (1,1,0), 'P')
-    # P.add_coordinate(P.amino_acids, (2,1,0), 'H')
-    #
-
-    #Climber(sequence, iterations, output_file, threeD, P).run()
-
-    #test =Climber(sequence, iterations, output_file, threeD, P)
-
-    #print(test.is_legal([(1,-1,0),(1,0,0),(1,1,0),(2,1,0)]))
