@@ -33,4 +33,19 @@ De tweede parameter is de naam van de output file waarin de output moet worden o
 
 Als laatste kan met -threeD, een optionele flag, de 3d-weergave ingeschakeld worden. Alle algoritmen zijn zo geïmplementeerd dat ze ook werken in 3d.
 
+## Heatmap
+De heatmap geeft een visuele weergave van hoe verschillende parameters de prestaties van het model beïnvloeden. Dit kan helpen bij het identificeren van trends en optimale instellingen voor de lookahead-diepte en het aantal beams.
+De heatmap wordt gegenereerd door het volgende commando in de terminal uit te voeren:
+
+python -m algorithms.heatmap
+
+De parameters kunnen in de code zelf worden aangepast. De heatmap visualiseert de scores voor diverse parametercombinaties en toont tevens de benodigde berekeningstijd. De assen vertegenwoordigen de geselecteerde variabelen, terwijl de kleur de score aanduidt: een donkerdere kleur wijst op een lagere (en dus betere) score. Dit helpt bij het beoordelen van de efficiëntie en effectiviteit van verschillende instellingen.
+
+## Algoritme Vergelijking
+In deze vergelijking worden uitsluitend Random Folding en Beam Search getest. De Beam Search-algoritme wordt uitgevoerd en de tijd gemeten die nodig is om een bepaalde score te bereiken. Vervolgens wordt Random Folding exact even lang uitgevoerd, zodat een eerlijke vergelijking ontstaat.
+De vergelijking wordt aangeroepen met:
+
+python -m algorithms.algorithm_comparison
+
+Net als bij de heatmap kunnen de parameters binnen de code worden aangepast. De resultaten worden samengevat in een grafiek waarin per algoritme de behaalde scores worden weergegeven. Dit geeft inzicht in hoe goed Beam Search en Random Folding presteren bij een gegeven dataset en welke instellingen het meest invloed hebben op de prestaties.
 
