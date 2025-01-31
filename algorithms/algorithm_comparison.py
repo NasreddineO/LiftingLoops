@@ -74,7 +74,7 @@ plt.gca().invert_yaxis()
 
 # finalize plot
 plt.title(f"Algorithm Score Comparison (Same Runtime: {beam_time:.2f}s)")
-plt.xlabel("Algorithm")
+plt.xlabel("Itterations")
 plt.ylabel("Score")
 plt.legend()
 plt.show()
