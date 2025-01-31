@@ -40,17 +40,19 @@ class RandomFolding(Algorithm):
         """
         # generate a random list of folds based on whether it's 2D or 3D.
         if self.threeD:
-            possible_folds = [1, -1, 2, -2, 3, -3]
+            possible_folds = set([1, -1, 2, -2, 3, -3])
         else:
-            possible_folds = [1, -1, 2, -2]
+            possible_folds = set([1, -1, 2, -2])
 
         # create an empty list to store the randomly chosen folds
         folds = [1]
+        previous_fold = 1
 
         # loop through the sequence length minus the first two base folds
         for _ in range(len(self.sequence) - 2):
             # randomly select a fold and add the fold to the list
-            fold = random.choice(possible_folds)
+            fold = random.choice(tuple(possible_folds.difference([previous_fold * -1])))
+            previous_fold = fold
             folds.append(fold)
 
         return folds
